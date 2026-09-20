@@ -3521,19 +3521,23 @@
                 <div class="form-group">
                     <label>Profile Picture</label>
                     <div style="display:flex;gap:16px;align-items:center;margin-top:6px;flex-wrap:wrap;">
-                        <!-- Thumbnail Preview -->
-                        <div id="tm-preview-wrap-${i}" style="width:76px;height:76px;border:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                        <!-- Thumbnail Preview with dark checkerboard for transparency verification -->
+                        <div id="tm-preview-wrap-${i}" style="width:76px;height:76px;border:1px solid var(--border);background:repeating-conic-gradient(#242424 0% 25%, #161616 0% 50%) 50% / 12px 12px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
                             ${m.image_url
                                 ? `<img src="${m.image_url}" id="tm-preview-img-${i}" style="width:100%;height:100%;object-fit:cover;">`
                                 : `<span id="tm-preview-empty-${i}" style="font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;text-align:center;padding:4px;">No Photo</span>`}
                         </div>
                         <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:220px;">
-                            <div style="display:flex;gap:8px;align-items:center;">
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                                 <label class="btn-secondary" style="cursor:pointer;padding:7px 14px;font-size:0.75rem;margin:0;display:inline-flex;align-items:center;gap:6px;">
                                     <span>Upload Picture</span>
                                     <input type="file" accept="image/*" style="display:none;" onchange="handleTeamPhotoUpload(event, ${i})">
                                 </label>
+                                <button type="button" class="btn-secondary" onclick="triggerRemoveBackground(${i})" style="padding:7px 12px;font-size:0.75rem;" title="Auto-remove studio background from current photo">🪄 Remove BG</button>
                                 <button type="button" class="btn-danger" onclick="clearTeamPhoto(${i})" style="padding:7px 12px;font-size:0.75rem;">✕ Remove</button>
+                                <label style="display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--text2);cursor:pointer;user-select:none;margin-left:4px;" title="Automatically remove studio background on upload">
+                                    <input type="checkbox" id="tm-autoremove-${i}" checked style="accent-color:var(--accent);cursor:pointer;"> Auto-remove BG
+                                </label>
                             </div>
                             <input type="text" id="tm-img-${i}" value="${m.image_url || ''}" placeholder="Or paste image URL / local path (e.g. assets/team/john.jpg)" oninput="updateTeamPhotoPreview(this.value, ${i})">
                         </div>
@@ -3585,17 +3589,185 @@
             showToast('Picture cleared.');
         }
 
+        function removeStudioBackgroundFromCanvas(canvas) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const imgData = ctx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+            const totalPixels = width * height;
+
+            // 1. Check if image already has transparency (preserve existing transparent cutouts)
+            let transparentCount = 0;
+            for (let i = 3; i < data.length; i += 4) {
+                if (data[i] < 200) transparentCount++;
+            }
+            if (transparentCount > totalPixels * 0.01) {
+                return false; // Already transparent
+            }
+
+            // 2. Sample corner colors (top-left, top-right) to detect background color
+            const sampleSize = Math.min(18, Math.floor(width / 8), Math.floor(height / 8));
+            let rSum = 0, gSum = 0, bSum = 0, count = 0;
+
+            for (let y = 0; y < sampleSize; y++) {
+                for (let x = 0; x < sampleSize; x++) {
+                    const idx = (y * width + x) * 4;
+                    rSum += data[idx]; gSum += data[idx + 1]; bSum += data[idx + 2];
+                    count++;
+                }
+                for (let x = width - sampleSize; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    rSum += data[idx]; gSum += data[idx + 1]; bSum += data[idx + 2];
+                    count++;
+                }
+            }
+
+            const bgR = rSum / count;
+            const bgG = gSum / count;
+            const bgB = bSum / count;
+            const avgBrightness = (bgR + bgG + bgB) / 3;
+            const isDark = avgBrightness < 65;
+            const isLight = avgBrightness > 195;
+
+            function isBgColor(r, g, b) {
+                if (isDark) {
+                    const maxVal = Math.max(r, g, b);
+                    if (maxVal <= 42) return true;
+                    const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                    return dist <= 48;
+                } else if (isLight) {
+                    const minVal = Math.min(r, g, b);
+                    if (minVal >= 215) return true;
+                    const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                    return dist <= 42;
+                } else {
+                    const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                    return dist <= 40;
+                }
+            }
+
+            // 3. BFS Flood Fill from edges (top, upper-left, upper-right)
+            const mask = new Uint8Array(totalPixels);
+            const queue = new Int32Array(totalPixels);
+            let head = 0, tail = 0;
+
+            // Seed along top row
+            for (let x = 0; x < width; x++) {
+                const idx = x * 4;
+                if (isBgColor(data[idx], data[idx + 1], data[idx + 2])) {
+                    mask[x] = 1;
+                    queue[tail++] = x;
+                }
+            }
+
+            // Seed upper side edges (top 70% to avoid touching suits or lower arms)
+            const sideLimit = Math.floor(height * 0.7);
+            for (let y = 1; y < sideLimit; y++) {
+                const idxL = (y * width) * 4;
+                if (mask[y * width] === 0 && isBgColor(data[idxL], data[idxL + 1], data[idxL + 2])) {
+                    mask[y * width] = 1;
+                    queue[tail++] = y * width;
+                }
+                const rightPos = y * width + (width - 1);
+                const idxR = rightPos * 4;
+                if (mask[rightPos] === 0 && isBgColor(data[idxR], data[idxR + 1], data[idxR + 2])) {
+                    mask[rightPos] = 1;
+                    queue[tail++] = rightPos;
+                }
+            }
+
+            // Run Flood Fill
+            while (head < tail) {
+                const curr = queue[head++];
+                const cx = curr % width;
+                const cy = (curr / width) | 0;
+
+                const neighbors = [
+                    cx > 0 ? curr - 1 : -1,
+                    cx < width - 1 ? curr + 1 : -1,
+                    cy > 0 ? curr - width : -1,
+                    cy < height - 1 ? curr + width : -1
+                ];
+
+                for (let k = 0; k < 4; k++) {
+                    const n = neighbors[k];
+                    if (n !== -1 && mask[n] === 0) {
+                        const ny = (n / width) | 0;
+                        if (ny > height * 0.85 && isDark) {
+                            const nIdx = n * 4;
+                            if (Math.max(data[nIdx], data[nIdx + 1], data[nIdx + 2]) > 28) {
+                                continue;
+                            }
+                        }
+
+                        const nIdx = n * 4;
+                        if (isBgColor(data[nIdx], data[nIdx + 1], data[nIdx + 2])) {
+                            mask[n] = 1;
+                            queue[tail++] = n;
+                        }
+                    }
+                }
+            }
+
+            // 4. Smooth Alpha Feathering around the mask boundaries
+            const featheredMask = new Float32Array(totalPixels);
+            for (let k = 0; k < totalPixels; k++) featheredMask[k] = mask[k];
+
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const p = y * width + x;
+                    if (mask[p] === 1) {
+                        if (mask[p - 1] === 0 || mask[p + 1] === 0 || mask[p - width] === 0 || mask[p + width] === 0) {
+                            featheredMask[p] = 0.5;
+                        }
+                    } else {
+                        if (mask[p - 1] === 1 || mask[p + 1] === 1 || mask[p - width] === 1 || mask[p + width] === 1) {
+                            featheredMask[p] = 0.25;
+                        }
+                    }
+                }
+            }
+
+            // Apply transparency to image data
+            let removedCount = 0;
+            for (let k = 0; k < totalPixels; k++) {
+                const val = featheredMask[k];
+                const idx = k * 4;
+                if (val >= 1) {
+                    data[idx + 3] = 0;
+                    removedCount++;
+                } else if (val > 0) {
+                    data[idx + 3] = Math.round((1 - val) * 255);
+                }
+            }
+
+            ctx.putImageData(imgData, 0, 0);
+            return removedCount > totalPixels * 0.05;
+        }
+
+        function exportCanvasDataUrl(canvas) {
+            // WebP provides alpha transparency with high-efficiency compression (fallback to PNG)
+            const webpUrl = canvas.toDataURL('image/webp', 0.9);
+            if (webpUrl && webpUrl.indexOf('data:image/webp') === 0) {
+                return webpUrl;
+            }
+            return canvas.toDataURL('image/png');
+        }
+
         function handleTeamPhotoUpload(event, i) {
             const file = event.target.files && event.target.files[0];
             if (!file) return;
 
             showToast('Processing photo...');
 
+            const autoRemoveEl = document.getElementById(`tm-autoremove-${i}`);
+            const autoRemove = autoRemoveEl ? autoRemoveEl.checked : true;
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    // Compress image using offscreen canvas to max 700px
                     const canvas = document.createElement('canvas');
                     const MAX_SIZE = 700;
                     let width = img.width;
@@ -3618,17 +3790,75 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    let bgRemoved = false;
+                    if (autoRemove) {
+                        bgRemoved = removeStudioBackgroundFromCanvas(canvas);
+                    }
 
+                    const compressedDataUrl = exportCanvasDataUrl(canvas);
                     const input = document.getElementById(`tm-img-${i}`);
                     if (input) input.value = compressedDataUrl;
 
                     updateTeamPhotoPreview(compressedDataUrl, i);
-                    showToast('Picture uploaded! Remember to click "Save Team".');
+                    if (bgRemoved) {
+                        showToast('Photo uploaded & background removed! Remember to click "Save Team".');
+                    } else {
+                        showToast('Photo uploaded! Remember to click "Save Team".');
+                    }
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        function triggerRemoveBackground(i) {
+            const input = document.getElementById(`tm-img-${i}`);
+            if (!input || !input.value.trim()) {
+                showToast('No picture to process. Upload or paste one first.');
+                return;
+            }
+
+            showToast('Removing background...');
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_SIZE = 700;
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_SIZE) {
+                        height = Math.round((height * MAX_SIZE) / width);
+                        width = MAX_SIZE;
+                    }
+                } else {
+                    if (height > MAX_SIZE) {
+                        width = Math.round((width * MAX_SIZE) / height);
+                        height = MAX_SIZE;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const removed = removeStudioBackgroundFromCanvas(canvas);
+                const compressedDataUrl = exportCanvasDataUrl(canvas);
+                input.value = compressedDataUrl;
+                updateTeamPhotoPreview(compressedDataUrl, i);
+
+                if (removed) {
+                    showToast('Background removed! Remember to click "Save Team".');
+                } else {
+                    showToast('Background processed (already transparent). Remember to click "Save Team".');
+                }
+            };
+            img.onerror = function() {
+                showToast('Could not load image to remove background.');
+            };
+            img.src = input.value.trim();
         }
 
         function updateTeamCardTitle(input, i) {

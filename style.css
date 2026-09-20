@@ -1609,6 +1609,16 @@ body.page-leaving {
     z-index: 2;
 }
 
+[data-theme="light"] .leader-photo-overlay,
+[theme="light"] .leader-photo-overlay {
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+}
+
+[data-theme="light"] .leader-photo-wrapper,
+[theme="light"] .leader-photo-wrapper {
+    background: #FFFFFF;
+}
+
 .leader-photo-placeholder {
     width: 100%;
     height: 100%;
