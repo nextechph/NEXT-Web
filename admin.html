@@ -5,6 +5,8 @@
     <!-- Anti-FOUC: apply saved theme before any CSS renders -->
     <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexTech Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1265,6 +1267,25 @@
                     </svg>
                     Services Editor
                 </div>
+                <div class="nav-item" onclick="switchView('team-editor')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    Team & Leadership
+                    <span class="nav-badge" id="teamBadge">0</span>
+                </div>
+                <div class="nav-item" onclick="switchView('faq-editor')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    FAQ Editor
+                    <span class="nav-badge" id="faqBadge">0</span>
+                </div>
                 <div class="nav-item" onclick="switchView('site-settings')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3" />
@@ -1649,6 +1670,46 @@
                 </div>
             </div>
 
+            <!-- TEAM / LEADERSHIP EDITOR -->
+            <div class="admin-view" id="view-team-editor">
+                <div class="view-header">
+                    <div>
+                        <div class="view-title">Team &amp; Leadership</div>
+                        <div class="view-sub">Manage the founder profile and C-level positions displayed on the homepage.</div>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn-secondary" onclick="addTeamMemberRow()">+ Add Member</button>
+                        <button class="btn-primary" onclick="saveTeamConfig()">Save All Changes</button>
+                    </div>
+                </div>
+                <div id="tm-cards-container"></div>
+                <div class="btn-row" style="margin-top:8px;">
+                    <button class="btn-primary" onclick="saveTeamConfig()">Save Team</button>
+                    <button class="btn-secondary" onclick="resetTeamConfig()">Reset to Defaults</button>
+                    <span class="save-status" id="teamSaveStatus">&#10003; Saved</span>
+                </div>
+            </div>
+
+            <!-- FAQ EDITOR -->
+            <div class="admin-view" id="view-faq-editor">
+                <div class="view-header">
+                    <div>
+                        <div class="view-title">FAQ Editor</div>
+                        <div class="view-sub">Manage FAQs shown on the homepage. Answers are embedded as FAQPage JSON-LD schema for SEO, AEO &amp; GEO.</div>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn-secondary" onclick="addFaqRow()">+ Add FAQ</button>
+                        <button class="btn-primary" onclick="saveFaqConfig()">Save All Changes</button>
+                    </div>
+                </div>
+                <div id="faq-cards-container"></div>
+                <div class="btn-row" style="margin-top:8px;">
+                    <button class="btn-primary" onclick="saveFaqConfig()">Save FAQs</button>
+                    <button class="btn-secondary" onclick="resetFaqConfig()">Reset to Defaults</button>
+                    <span class="save-status" id="faqSaveStatus">&#10003; Saved</span>
+                </div>
+            </div>
+
             <!-- SITE SETTINGS -->
             <div class="admin-view" id="view-site-settings">
                 <div class="view-header">
@@ -1799,6 +1860,8 @@
             if (view === 'dashboard') refreshDashboard();
             if (view === 'planner-editor') loadPlannerEditor();
             if (view === 'services-editor') loadServicesEditor();
+            if (view === 'team-editor') loadTeamEditor();
+            if (view === 'faq-editor') loadFaqEditor();
             if (view === 'site-settings') loadSiteSettings();
             if (view === 'blog-new' && !isEdit) {
                 document.getElementById('blogFormTitle').textContent = 'New Blog Post';
@@ -2276,8 +2339,18 @@
                 .from('portfolio_projects')
                 .select('*', { count: 'exact', head: true });
 
+            const { count: teamCount } = await supabase
+                .from('team_members')
+                .select('*', { count: 'exact', head: true });
+
+            const { count: faqCount } = await supabase
+                .from('faqs')
+                .select('*', { count: 'exact', head: true });
+
             document.getElementById('blogBadge').textContent = postsCount || 0;
             document.getElementById('projectBadge').textContent = projCount || 0;
+            document.getElementById('teamBadge').textContent = teamCount || 0;
+            document.getElementById('faqBadge').textContent = faqCount || 0;
             refreshDashboard();
         }
 
@@ -2916,6 +2989,419 @@
                 localStorage.removeItem('nt_site_settings');
                 applySiteSettingsUIData(SITE_DEFAULTS);
                 showToast('Settings reset to defaults.');
+            }
+        }
+
+        // ══════════════════════════════════════════
+        // ── TEAM / LEADERSHIP EDITOR ──
+        // ══════════════════════════════════════════
+
+        const TEAM_DEFAULTS = [
+            {
+                name: 'John Enrico Santiago',
+                role: 'Founder & CEO',
+                badge: 'Founder',
+                bio: 'Visionary technologist and lead architect of Next Technology. Building minimalist, high-performance digital products that empower brands and delight users.',
+                image_url: '',
+                skills: ['Full-Stack Development', 'Product Strategy', 'UI/UX Design', 'System Architecture'],
+                linkedin_url: '', github_url: '', twitter_url: '', email: ''
+            },
+            {
+                name: 'Chief Technology Officer',
+                role: 'Chief Technology Officer',
+                badge: 'C-Level',
+                bio: 'Oversees the technical direction of the company — from infrastructure and cloud systems to AI integrations and security frameworks.',
+                image_url: '',
+                skills: ['Cloud Infrastructure', 'System Architecture', 'AI & ML', 'Security Engineering'],
+                linkedin_url: '', github_url: '', twitter_url: '', email: ''
+            },
+            {
+                name: 'Chief Operating Officer',
+                role: 'Chief Operating Officer',
+                badge: 'C-Level',
+                bio: 'Drives operational excellence, client delivery pipelines, and the internal systems that keep Next Technology running at peak performance.',
+                image_url: '',
+                skills: ['Operations Management', 'Client Relations', 'Project Delivery', 'Business Scaling'],
+                linkedin_url: '', github_url: '', twitter_url: '', email: ''
+            },
+            {
+                name: 'Chief Design Officer',
+                role: 'Chief Design Officer',
+                badge: 'C-Level',
+                bio: 'Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NexTech visual language.',
+                image_url: '',
+                skills: ['UI/UX Design', 'Brand Identity', 'Design Systems', 'Creative Direction'],
+                linkedin_url: '', github_url: '', twitter_url: '', email: ''
+            }
+        ];
+
+        // Store Supabase row IDs for existing members to enable update vs insert
+        let _teamMemberIds = [];
+
+        async function loadTeamEditor() {
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            const { data, error } = await supabase
+                .from('team_members')
+                .select('*')
+                .order('sort_order', { ascending: true });
+
+            if (error || !data || !data.length) {
+                renderTeamEditorWithData(TEAM_DEFAULTS);
+                _teamMemberIds = [];
+                return;
+            }
+
+            _teamMemberIds = data.map(m => m.id);
+            const mapped = data.map(m => ({
+                name: m.name || '',
+                role: m.role || '',
+                badge: m.badge || 'Team',
+                bio: m.bio || '',
+                image_url: m.image_url || '',
+                skills: Array.isArray(m.skills) ? m.skills : (m.skills ? Object.values(m.skills) : []),
+                linkedin_url: m.linkedin_url || '',
+                github_url: m.github_url || '',
+                twitter_url: m.twitter_url || '',
+                email: m.email || ''
+            }));
+            renderTeamEditorWithData(mapped);
+        }
+
+        function getTeamDraft() {
+            const container = document.getElementById('tm-cards-container');
+            const cards = container.querySelectorAll('.team-editor-card');
+            return Array.from(cards).map((card, i) => ({
+                name: card.querySelector(`[id^="tm-name-"]`).value.trim(),
+                role: card.querySelector(`[id^="tm-role-"]`).value.trim(),
+                badge: card.querySelector(`[id^="tm-badge-"]`).value,
+                bio: card.querySelector(`[id^="tm-bio-"]`).value.trim(),
+                image_url: card.querySelector(`[id^="tm-img-"]`).value.trim(),
+                skills: card.querySelector(`[id^="tm-skills-"]`).value.split(',').map(s => s.trim()).filter(Boolean),
+                linkedin_url: card.querySelector(`[id^="tm-li-"]`).value.trim(),
+                github_url: card.querySelector(`[id^="tm-gh-"]`).value.trim(),
+                twitter_url: card.querySelector(`[id^="tm-tw-"]`).value.trim(),
+                email: card.querySelector(`[id^="tm-em-"]`).value.trim()
+            }));
+        }
+
+        function renderTeamEditorWithData(members) {
+            const container = document.getElementById('tm-cards-container');
+            if (!members.length) {
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-title">No team members yet</div><div class="empty-state-sub">Click "+ Add Member" to add your first team member.</div></div>`;
+                return;
+            }
+            container.innerHTML = members.map((m, i) => `
+            <div class="form-section team-editor-card" style="margin-bottom:16px;">
+                <div class="form-section-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>${m.name || 'New Member'}</span>
+                    <button class="btn-danger" onclick="deleteTeamMemberRow(${i})" style="padding:6px 12px;font-size:0.7rem;">Remove</button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="tm-name-${i}" value="${m.name || ''}" placeholder="e.g. John Enrico Santiago" oninput="updateTeamCardTitle(this, ${i})">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge / Category</label>
+                        <select id="tm-badge-${i}">
+                            <option value="Founder"${m.badge === 'Founder' ? ' selected' : ''}>Founder</option>
+                            <option value="C-Level"${m.badge === 'C-Level' ? ' selected' : ''}>C-Level</option>
+                            <option value="Director"${m.badge === 'Director' ? ' selected' : ''}>Director</option>
+                            <option value="Team"${m.badge === 'Team' || !m.badge ? ' selected' : ''}>Team</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Executive Title / Role *</label>
+                    <input type="text" id="tm-role-${i}" value="${m.role || ''}" placeholder="e.g. Founder & CEO, Chief Technology Officer">
+                </div>
+                <div class="form-group">
+                    <label>Bio / Vision Statement</label>
+                    <textarea id="tm-bio-${i}" style="min-height:80px" placeholder="A brief description of this person's role, vision, and expertise...">${m.bio || ''}</textarea>
+                </div>
+                <div class="form-group">
+                    <label>Photo URL</label>
+                    <input type="text" id="tm-img-${i}" value="${m.image_url || ''}" placeholder="https://... (leave blank for initials avatar)">
+                </div>
+                <div class="form-group">
+                    <label>Skills / Specialties <span style="color:var(--text3);font-weight:400;">(comma-separated)</span></label>
+                    <input type="text" id="tm-skills-${i}" value="${(Array.isArray(m.skills) ? m.skills : []).join(', ')}" placeholder="e.g. Full-Stack Development, UI/UX Design, Product Strategy">
+                </div>
+                <div class="form-section-title" style="margin-top:8px;">Social Links</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>LinkedIn URL</label>
+                        <input type="text" id="tm-li-${i}" value="${m.linkedin_url || ''}" placeholder="https://linkedin.com/in/...">
+                    </div>
+                    <div class="form-group">
+                        <label>GitHub URL</label>
+                        <input type="text" id="tm-gh-${i}" value="${m.github_url || ''}" placeholder="https://github.com/...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>X / Twitter URL</label>
+                        <input type="text" id="tm-tw-${i}" value="${m.twitter_url || ''}" placeholder="https://x.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="text" id="tm-em-${i}" value="${m.email || ''}" placeholder="hello@example.com">
+                    </div>
+                </div>
+            </div>`).join('');
+        }
+
+        function updateTeamCardTitle(input, i) {
+            const card = input.closest('.team-editor-card');
+            const titleEl = card.querySelector('.form-section-title span');
+            if (titleEl) titleEl.textContent = input.value || 'New Member';
+        }
+
+        function addTeamMemberRow() {
+            const draft = getTeamDraft();
+            draft.push({ name: '', role: '', badge: 'Team', bio: '', image_url: '', skills: [], linkedin_url: '', github_url: '', twitter_url: '', email: '' });
+            renderTeamEditorWithData(draft);
+        }
+
+        function deleteTeamMemberRow(i) {
+            if (!confirm('Remove this team member?')) return;
+            const draft = getTeamDraft();
+            draft.splice(i, 1);
+            _teamMemberIds.splice(i, 1);
+            renderTeamEditorWithData(draft);
+        }
+
+        async function saveTeamConfig() {
+            const members = getTeamDraft();
+
+            for (let i = 0; i < members.length; i++) {
+                if (!members[i].name) { showToast(`Member #${i + 1} name cannot be empty.`); return; }
+                if (!members[i].role) { showToast(`Member #${i + 1} role cannot be empty.`); return; }
+            }
+
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            showToast('Saving team...');
+
+            // Delete existing and re-insert (simplest strategy matching services editor)
+            const { error: deleteError } = await supabase
+                .from('team_members')
+                .delete()
+                .not('id', 'is', null);
+
+            if (deleteError) {
+                showToast('Error clearing team: ' + deleteError.message);
+                return;
+            }
+
+            const dbMembers = members.map((m, idx) => ({
+                name: m.name,
+                role: m.role,
+                badge: m.badge || 'Team',
+                bio: m.bio,
+                image_url: m.image_url || null,
+                skills: m.skills,
+                linkedin_url: m.linkedin_url || null,
+                github_url: m.github_url || null,
+                twitter_url: m.twitter_url || null,
+                email: m.email || null,
+                sort_order: idx
+            }));
+
+            const { error: insertError } = await supabase
+                .from('team_members')
+                .insert(dbMembers);
+
+            if (insertError) {
+                showToast('Error saving team: ' + insertError.message);
+            } else {
+                localStorage.removeItem('nt_team');
+                showToast('Team saved!');
+                const s = document.getElementById('teamSaveStatus');
+                s.style.display = 'inline';
+                setTimeout(() => s.style.display = 'none', 2500);
+                refreshAll();
+            }
+        }
+
+        async function resetTeamConfig() {
+            if (!confirm('Reset team to defaults? This will overwrite the database.')) return;
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            await supabase.from('team_members').delete().not('id', 'is', null);
+
+            const dbDefaults = TEAM_DEFAULTS.map((m, idx) => ({
+                name: m.name, role: m.role, badge: m.badge, bio: m.bio,
+                image_url: m.image_url || null, skills: m.skills,
+                linkedin_url: m.linkedin_url || null, github_url: m.github_url || null,
+                twitter_url: m.twitter_url || null, email: m.email || null,
+                sort_order: idx
+            }));
+
+            const { error } = await supabase.from('team_members').insert(dbDefaults);
+            if (error) {
+                showToast('Error resetting: ' + error.message);
+            } else {
+                localStorage.removeItem('nt_team');
+                renderTeamEditorWithData(TEAM_DEFAULTS);
+                showToast('Team reset to defaults.');
+                refreshAll();
+            }
+        }
+        // ══════════════════════════════════════════
+        // ── FAQ EDITOR ──
+        // ══════════════════════════════════════════
+
+        const FAQ_DEFAULTS = [
+            { question: 'How much does a website cost in the Philippines?', answer: 'Website pricing at Next Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.', category: 'Pricing' },
+            { question: 'How long does it take to build a website?', answer: 'A standard website typically takes 1–2 months from kickoff to launch. Rush projects can be delivered in 2–4 weeks, while relaxed timelines with no hard deadline extend to 3+ months. Timeline depends on project complexity, the number of revision rounds, and how quickly feedback is provided.', category: 'Process' },
+            { question: 'What types of websites does Next Technology build?', answer: 'We build landing pages, business websites, portfolio websites, web applications, e-commerce stores, and blog platforms. Every project is engineered for speed, SEO, and mobile responsiveness — with a minimalist, high-performance design philosophy.', category: 'Services' },
+            { question: 'What technologies do you use?', answer: 'We use modern web technologies including HTML5, CSS3, JavaScript (ES6+), and frameworks like React and Next.js for complex apps. For backend and databases we use Supabase (PostgreSQL), and for deployment we use Vercel, Netlify, and shared hosting. Every build is clean, semantic, and optimized for performance.', category: 'Services' },
+            { question: 'Do you offer website maintenance after launch?', answer: 'Yes. We offer post-launch support including bug fixes, content updates, security patches, and performance monitoring. Maintenance plans can be arranged on a retainer or per-request basis depending on the scope of your site.', category: 'Services' },
+            { question: 'How do I get started with a project?', answer: 'Getting started is simple: fill out the Project Planner on our website to configure your website type, features, budget, and timeline. Our team will review your submission and reach out within 24–48 hours to discuss next steps. No commitment required to get a quote.', category: 'Process' },
+            { question: 'Do you work with clients outside the Philippines?', answer: 'Yes. Next Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.', category: 'General' },
+            { question: 'What is included in a website development package?', answer: 'All our website packages include custom design, clean semantic code, mobile responsiveness, basic SEO setup (meta tags, sitemap, structured data), and one round of revisions. Additional pages, animations, contact forms, admin panels, and e-commerce features are available as add-ons.', category: 'Services' }
+        ];
+
+        async function loadFaqEditor() {
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            const { data, error } = await supabase
+                .from('faqs')
+                .select('*')
+                .order('sort_order', { ascending: true });
+
+            if (error || !data || !data.length) {
+                renderFaqEditorWithData(FAQ_DEFAULTS);
+                return;
+            }
+            renderFaqEditorWithData(data);
+        }
+
+        function getFaqDraft() {
+            const container = document.getElementById('faq-cards-container');
+            const cards = container.querySelectorAll('.faq-editor-card');
+            return Array.from(cards).map((card, i) => ({
+                question: card.querySelector(`#faq-q-${i}`).value.trim(),
+                answer: card.querySelector(`#faq-a-${i}`).value.trim(),
+                category: card.querySelector(`#faq-cat-${i}`).value
+            }));
+        }
+
+        function renderFaqEditorWithData(faqs) {
+            const container = document.getElementById('faq-cards-container');
+            if (!faqs.length) {
+                container.innerHTML = `<div class="empty-state"><div class="empty-state-title">No FAQs yet</div><div class="empty-state-sub">Click "+ Add FAQ" to add your first question.</div></div>`;
+                return;
+            }
+            container.innerHTML = faqs.map((f, i) => `
+            <div class="form-section faq-editor-card" style="margin-bottom:12px;">
+                <div class="form-section-title" style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>FAQ #${i + 1}</span>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <select id="faq-cat-${i}" style="background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 8px;font-size:0.7rem;letter-spacing:0.08em;">
+                            <option value="General"${f.category === 'General' ? ' selected' : ''}>General</option>
+                            <option value="Pricing"${f.category === 'Pricing' ? ' selected' : ''}>Pricing</option>
+                            <option value="Process"${f.category === 'Process' ? ' selected' : ''}>Process</option>
+                            <option value="Services"${f.category === 'Services' ? ' selected' : ''}>Services</option>
+                        </select>
+                        <button class="btn-danger" onclick="deleteFaqRow(${i})" style="padding:6px 12px;font-size:0.7rem;">Remove</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Question *</label>
+                    <input type="text" id="faq-q-${i}" value="${(f.question || '').replace(/"/g, '&quot;')}" placeholder="e.g. How much does a website cost?">
+                </div>
+                <div class="form-group">
+                    <label>Answer * <span style="color:var(--text3);font-weight:400;">(aim for 40–80 words for featured snippets)</span></label>
+                    <textarea id="faq-a-${i}" style="min-height:90px" placeholder="A clear, concise answer...">${f.answer || ''}</textarea>
+                </div>
+            </div>`).join('');
+        }
+
+        function addFaqRow() {
+            const draft = getFaqDraft();
+            draft.push({ question: '', answer: '', category: 'General' });
+            renderFaqEditorWithData(draft);
+            // Scroll to bottom
+            const container = document.getElementById('faq-cards-container');
+            const lastCard = container.lastElementChild;
+            if (lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function deleteFaqRow(i) {
+            if (!confirm('Remove this FAQ?')) return;
+            const draft = getFaqDraft();
+            draft.splice(i, 1);
+            renderFaqEditorWithData(draft);
+        }
+
+        async function saveFaqConfig() {
+            const faqs = getFaqDraft();
+
+            for (let i = 0; i < faqs.length; i++) {
+                if (!faqs[i].question) { showToast(`FAQ #${i + 1}: question cannot be empty.`); return; }
+                if (!faqs[i].answer) { showToast(`FAQ #${i + 1}: answer cannot be empty.`); return; }
+            }
+
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            showToast('Saving FAQs...');
+
+            const { error: deleteError } = await supabase
+                .from('faqs')
+                .delete()
+                .not('id', 'is', null);
+
+            if (deleteError) { showToast('Error clearing FAQs: ' + deleteError.message); return; }
+
+            const dbFaqs = faqs.map((f, idx) => ({
+                question: f.question,
+                answer: f.answer,
+                category: f.category || 'General',
+                sort_order: idx
+            }));
+
+            const { error: insertError } = await supabase.from('faqs').insert(dbFaqs);
+
+            if (insertError) {
+                showToast('Error saving FAQs: ' + insertError.message);
+            } else {
+                localStorage.removeItem('nt_faqs');
+                showToast('FAQs saved! Schema will update on next page load.');
+                const s = document.getElementById('faqSaveStatus');
+                s.style.display = 'inline';
+                setTimeout(() => s.style.display = 'none', 2500);
+                refreshAll();
+            }
+        }
+
+        async function resetFaqConfig() {
+            if (!confirm('Reset FAQs to defaults? This will overwrite the database.')) return;
+            const supabase = getSupabaseClient();
+            if (!supabase) return;
+
+            await supabase.from('faqs').delete().not('id', 'is', null);
+
+            const dbDefaults = FAQ_DEFAULTS.map((f, idx) => ({
+                question: f.question, answer: f.answer,
+                category: f.category || 'General', sort_order: idx
+            }));
+
+            const { error } = await supabase.from('faqs').insert(dbDefaults);
+            if (error) {
+                showToast('Error resetting: ' + error.message);
+            } else {
+                localStorage.removeItem('nt_faqs');
+                renderFaqEditorWithData(FAQ_DEFAULTS);
+                showToast('FAQs reset to defaults.');
+                refreshAll();
             }
         }
     </script>

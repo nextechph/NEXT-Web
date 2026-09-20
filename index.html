@@ -5,10 +5,40 @@
     <!-- Anti-FOUC: apply saved theme before any CSS renders -->
     <script>(function(){var t=localStorage.getItem('theme')||'dark';document.documentElement.setAttribute('data-theme',t);})()</script>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Next Technology | Building What's Next.</title>
     <meta name="description"
         content="NexTech designs and develops minimalist, high-performance websites and premium digital solutions including landing pages, portfolios, business websites, and UI/UX.">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nextechnology.com/">
+    <!-- Open Graph (Social / GEO signals) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Next Technology">
+    <meta property="og:title" content="Next Technology | Building What's Next.">
+    <meta property="og:description" content="Premium web design & development studio in the Philippines. We build minimalist, high-performance websites, landing pages, and custom web apps.">
+    <meta property="og:url" content="https://nextechnology.com/">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Next Technology | Building What's Next.">
+    <meta name="twitter:description" content="Premium web design & development studio in the Philippines. We build minimalist, high-performance websites, landing pages, and custom web apps.">
+    <!-- Organization Schema (inline static for crawlers) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Next Technology",
+      "url": "https://nextechnology.com",
+      "description": "Premium web design and development studio. We build minimalist, high-performance websites, landing pages, and custom web applications.",
+      "areaServed": "Worldwide",
+      "serviceType": ["Web Design", "Web Development", "UI/UX Design", "Landing Page Design"],
+      "priceRange": "₱₱",
+      "sameAs": []
+    }
+    </script>
+    <!-- FAQ Schema placeholder — populated dynamically by loader script -->
+    <script type="application/ld+json" id="faq-schema">{}</script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +74,7 @@
                 <a href="planner.html" class="nav-link">Planner</a>
                 <a href="contact.html" class="nav-link">Contact</a>
                 <a href="blog.html" class="nav-link">Blog</a>
+                <a href="#leadership" class="nav-link">Team</a>
             </nav>
 
             <div class="nav-actions">
@@ -65,6 +96,7 @@
             <a href="planner.html" class="mobile-nav-link">Planner</a>
             <a href="contact.html" class="mobile-nav-link">Contact</a>
             <a href="blog.html" class="mobile-nav-link">Blog</a>
+            <a href="#leadership" class="mobile-nav-link">Team</a>
             <a href="planner.html" class="btn-primary mobile-btn">Start Project</a>
         </div>
     </header>
@@ -210,6 +242,203 @@
 
     </main>
 
+    <!-- Leadership & Founders Section -->
+    <section class="leadership-section" id="leadership">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">LEADERSHIP</span>
+                <h2 class="section-title">The Minds Behind What's Next</h2>
+                <p class="section-subtitle">Driven by innovation, precision engineering, and a relentless commitment to minimalist excellence.</p>
+            </div>
+
+            <!-- Dynamic cards injected here by JS; static fallback shown while loading -->
+            <div class="leadership-grid" id="leadershipGrid">
+                <!-- Fallback: rendered immediately, replaced by dynamic data -->
+                <div class="leader-card founder reveal">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="JE">
+                            <span class="leader-initials">JE</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill founder-badge">Founder</div>
+                            <h3 class="leader-name">John Enrico Santiago</h3>
+                            <div class="leader-role">Founder &amp; CEO</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">Visionary technologist and lead architect of Next Technology. Building minimalist, high-performance digital products that empower brands and delight users.</p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Full-Stack Development</span>
+                        <span class="leader-skill-tag">Product Strategy</span>
+                        <span class="leader-skill-tag">UI/UX Design</span>
+                        <span class="leader-skill-tag">System Architecture</span>
+                    </div>
+                </div>
+                <div class="leader-card reveal">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CT">
+                            <span class="leader-initials">CT</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h3 class="leader-name">Chief Technology Officer</h3>
+                            <div class="leader-role">Chief Technology Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">Oversees the technical direction of the company — from infrastructure and cloud systems to AI integrations and security frameworks.</p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Cloud Infrastructure</span>
+                        <span class="leader-skill-tag">System Architecture</span>
+                        <span class="leader-skill-tag">AI &amp; ML</span>
+                        <span class="leader-skill-tag">Security Engineering</span>
+                    </div>
+                </div>
+                <div class="leader-card reveal">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CO">
+                            <span class="leader-initials">CO</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h3 class="leader-name">Chief Operating Officer</h3>
+                            <div class="leader-role">Chief Operating Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">Drives operational excellence, client delivery pipelines, and the internal systems that keep Next Technology running at peak performance.</p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Operations Management</span>
+                        <span class="leader-skill-tag">Client Relations</span>
+                        <span class="leader-skill-tag">Project Delivery</span>
+                        <span class="leader-skill-tag">Business Scaling</span>
+                    </div>
+                </div>
+                <div class="leader-card reveal">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CD">
+                            <span class="leader-initials">CD</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h3 class="leader-name">Chief Design Officer</h3>
+                            <div class="leader-role">Chief Design Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NexTech visual language.</p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">UI/UX Design</span>
+                        <span class="leader-skill-tag">Brand Identity</span>
+                        <span class="leader-skill-tag">Design Systems</span>
+                        <span class="leader-skill-tag">Creative Direction</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="section-container">
+            <div class="section-header">
+                <span class="section-tag">FAQ</span>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-subtitle">Everything you need to know before starting your project with Next Technology.</p>
+            </div>
+
+            <!-- Category filter tabs -->
+            <div class="faq-tabs" id="faqTabs" role="tablist">
+                <button class="faq-tab active" data-filter="all" onclick="filterFaqs('all', this)" role="tab" aria-selected="true">All</button>
+                <button class="faq-tab" data-filter="Pricing" onclick="filterFaqs('Pricing', this)" role="tab" aria-selected="false">Pricing</button>
+                <button class="faq-tab" data-filter="Process" onclick="filterFaqs('Process', this)" role="tab" aria-selected="false">Process</button>
+                <button class="faq-tab" data-filter="Services" onclick="filterFaqs('Services', this)" role="tab" aria-selected="false">Services</button>
+                <button class="faq-tab" data-filter="General" onclick="filterFaqs('General', this)" role="tab" aria-selected="false">General</button>
+            </div>
+
+            <div class="faq-list" id="faqList" role="list">
+                <!-- Static fallback FAQs — replaced by dynamic data -->
+                <div class="faq-item reveal" data-category="Pricing" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>How much does a website cost in the Philippines?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Website pricing at Next Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Process" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>How long does it take to build a website?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>A standard website typically takes 1–2 months from kickoff to launch. Rush projects can be delivered in 2–4 weeks, while relaxed timelines with no hard deadline extend to 3+ months. Timeline depends on project complexity, the number of revision rounds, and how quickly feedback is provided.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Services" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>What types of websites does Next Technology build?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We build landing pages, business websites, portfolio websites, web applications, e-commerce stores, and blog platforms. Every project is engineered for speed, SEO, and mobile responsiveness — with a minimalist, high-performance design philosophy.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Services" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>What technologies do you use?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We use modern web technologies including HTML5, CSS3, JavaScript (ES6+), and frameworks like React and Next.js for complex apps. For backend and databases we use Supabase (PostgreSQL), and for deployment we use Vercel, Netlify, and shared hosting. Every build is clean, semantic, and optimized for performance.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Services" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>Do you offer website maintenance after launch?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. We offer post-launch support including bug fixes, content updates, security patches, and performance monitoring. Maintenance plans can be arranged on a retainer or per-request basis depending on the scope of your site.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Process" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>How do I get started with a project?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Getting started is simple: fill out the Project Planner on our website to configure your website type, features, budget, and timeline. Our team will review your submission and reach out within 24–48 hours to discuss next steps. No commitment required to get a quote.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="General" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>Do you work with clients outside the Philippines?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes. Next Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.</p>
+                    </div>
+                </div>
+                <div class="faq-item reveal" data-category="Services" role="listitem">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>What is included in a website development package?</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>All our website packages include custom design, clean semantic code, mobile responsiveness, basic SEO setup (meta tags, sitemap, structured data), and one round of revisions. Additional pages, animations, contact forms, admin panels, and e-commerce features are available as add-ons.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-cta">
+                <p>Still have questions?</p>
+                <a href="contact.html" class="btn-primary">Talk to Us</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
@@ -351,6 +580,244 @@
 
     <!-- Custom JS -->
     <script src="script.js"></script>
+
+    <!-- Team / Leadership Dynamic Loader -->
+    <script>
+        (async function loadLeadershipSection() {
+            // Wait for Supabase CDN
+            if (typeof window.supabase === 'undefined') {
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            const supabaseClient = window.supabaseClient || (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null);
+            if (!supabaseClient) return;
+
+            try {
+                const { data: members, error } = await supabaseClient
+                    .from('team_members')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+
+                if (error || !members || !members.length) return;
+
+                // Cache
+                localStorage.setItem('nt_team', JSON.stringify(members));
+
+                renderLeadershipCards(members);
+            } catch (e) {
+                console.error('Error loading team members:', e);
+            }
+
+            function getInitials(name) {
+                return (name || 'NT').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            }
+
+            function renderSocialLinks(m) {
+                const links = [];
+                if (m.linkedin_url) links.push(`<a href="${m.linkedin_url}" target="_blank" rel="noopener" aria-label="LinkedIn" class="leader-social-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>`);
+                if (m.github_url) links.push(`<a href="${m.github_url}" target="_blank" rel="noopener" aria-label="GitHub" class="leader-social-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                </a>`);
+                if (m.twitter_url) links.push(`<a href="${m.twitter_url}" target="_blank" rel="noopener" aria-label="X / Twitter" class="leader-social-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>`);
+                if (m.email) links.push(`<a href="mailto:${m.email}" aria-label="Email" class="leader-social-link">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </a>`);
+                return links.length ? `<div class="leader-socials">${links.join('')}</div>` : '';
+            }
+
+            function renderLeadershipCards(members) {
+                const grid = document.getElementById('leadershipGrid');
+                if (!grid) return;
+
+                grid.innerHTML = members.map((m, i) => {
+                    const initials = getInitials(m.name);
+                    const isFounder = m.badge === 'Founder';
+                    const badgeClass = isFounder ? 'founder-badge' : 'clevel-badge';
+                    const cardClass = isFounder ? 'leader-card founder reveal' : 'leader-card reveal';
+                    const skills = Array.isArray(m.skills) ? m.skills : [];
+                    const skillsHtml = skills.map(s => `<span class="leader-skill-tag">${s}</span>`).join('');
+                    const avatarHtml = m.image_url
+                        ? `<img src="${m.image_url}" alt="${m.name}" class="leader-avatar-img">`
+                        : `<span class="leader-initials">${initials}</span>`;
+
+                    return `
+                    <div class="${cardClass}" style="animation-delay:${i * 80}ms">
+                        <div class="leader-card-bg-glow"></div>
+                        <div class="leader-top">
+                            <div class="leader-avatar" data-initials="${initials}">
+                                ${avatarHtml}
+                            </div>
+                            <div class="leader-meta">
+                                <div class="leader-badge-pill ${badgeClass}">${m.badge || 'Team'}</div>
+                                <h3 class="leader-name">${m.name}</h3>
+                                <div class="leader-role">${m.role}</div>
+                            </div>
+                        </div>
+                        ${m.bio ? `<p class="leader-bio">${m.bio}</p>` : ''}
+                        ${skillsHtml ? `<div class="leader-skills">${skillsHtml}</div>` : ''}
+                        ${renderSocialLinks(m)}
+                    </div>`;
+                }).join('');
+
+                // Re-trigger scroll-reveal
+                const revealEls = grid.querySelectorAll('.reveal');
+                if ('IntersectionObserver' in window) {
+                    const obs = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                obs.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+                    revealEls.forEach(el => obs.observe(el));
+                } else {
+                    revealEls.forEach(el => el.classList.add('visible'));
+                }
+            }
+        })();
+    </script>
+
+    <!-- FAQ Dynamic Loader + JSON-LD Schema Updater + Accordion/Filter JS -->
+    <script>
+        // ── Accordion ──
+        function toggleFaq(btn) {
+            const item = btn.closest('.faq-item');
+            const answer = item.querySelector('.faq-answer');
+            const isOpen = item.classList.contains('open');
+
+            // Close all open items first
+            document.querySelectorAll('.faq-item.open').forEach(el => {
+                el.classList.remove('open');
+                el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                el.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            if (!isOpen) {
+                item.classList.add('open');
+                btn.setAttribute('aria-expanded', 'true');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        }
+
+        // ── Category Filter ──
+        function filterFaqs(filter, tabEl) {
+            document.querySelectorAll('.faq-tab').forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            tabEl.classList.add('active');
+            tabEl.setAttribute('aria-selected', 'true');
+
+            document.querySelectorAll('.faq-item').forEach(item => {
+                const cat = item.dataset.category;
+                const show = filter === 'all' || cat === filter;
+                item.style.display = show ? '' : 'none';
+
+                // Close hidden items
+                if (!show) {
+                    item.classList.remove('open');
+                    const a = item.querySelector('.faq-answer');
+                    if (a) a.style.maxHeight = null;
+                }
+            });
+        }
+
+        // ── Supabase FAQ Loader + Schema Updater ──
+        (async function loadFaqSection() {
+            if (typeof window.supabase === 'undefined') {
+                await new Promise(r => setTimeout(r, 300));
+            }
+
+            const client = window.supabaseClient || (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null);
+            if (!client) {
+                // Even without Supabase, inject static FAQ schema from DOM
+                injectSchemaFromDOM();
+                return;
+            }
+
+            try {
+                const { data: faqs, error } = await client
+                    .from('faqs')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+
+                if (error || !faqs || !faqs.length) {
+                    injectSchemaFromDOM();
+                    return;
+                }
+
+                localStorage.setItem('nt_faqs', JSON.stringify(faqs));
+                renderFaqList(faqs);
+                injectFaqSchema(faqs);
+            } catch (e) {
+                console.error('Error loading FAQs:', e);
+                injectSchemaFromDOM();
+            }
+
+            function renderFaqList(faqs) {
+                const list = document.getElementById('faqList');
+                if (!list) return;
+
+                list.innerHTML = faqs.map((f, i) => `
+                <div class="faq-item reveal" data-category="${f.category || 'General'}" role="listitem" style="animation-delay:${i * 50}ms">
+                    <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span>${f.question}</span>
+                        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p>${f.answer}</p>
+                    </div>
+                </div>`).join('');
+
+                // Scroll-reveal
+                const obs = new IntersectionObserver(entries => {
+                    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+                }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+                list.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+            }
+
+            function injectFaqSchema(faqs) {
+                const schema = {
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    "mainEntity": faqs.map(f => ({
+                        "@type": "Question",
+                        "name": f.question,
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": f.answer
+                        }
+                    }))
+                };
+                const el = document.getElementById('faq-schema');
+                if (el) el.textContent = JSON.stringify(schema);
+            }
+
+            function injectSchemaFromDOM() {
+                const items = document.querySelectorAll('#faqList .faq-item');
+                if (!items.length) return;
+                const schema = {
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    "mainEntity": Array.from(items).map(item => ({
+                        "@type": "Question",
+                        "name": item.querySelector('.faq-question span')?.textContent?.trim() || '',
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": item.querySelector('.faq-answer p')?.textContent?.trim() || ''
+                        }
+                    }))
+                };
+                const el = document.getElementById('faq-schema');
+                if (el) el.textContent = JSON.stringify(schema);
+            }
+        })();
+    </script>
 </body>
 
 </html>

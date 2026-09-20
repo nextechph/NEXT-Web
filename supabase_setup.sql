@@ -297,3 +297,165 @@ CREATE POLICY "Allow authenticated users to delete images" ON storage.objects
 GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
 GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO postgres, anon, authenticated, service_role;
+
+-- --------------------------------------------------
+-- 7. Team Members Table (Leadership / Founders)
+-- --------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.team_members (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    name text,
+    role text,
+    badge text DEFAULT 'Team',
+    bio text,
+    image_url text,
+    skills jsonb DEFAULT '[]'::jsonb,
+    linkedin_url text,
+    github_url text,
+    twitter_url text,
+    email text,
+    sort_order int4 DEFAULT 0,
+    created_at timestamptz DEFAULT now()
+);
+
+-- Migration: safe to run on existing databases
+ALTER TABLE public.team_members ADD COLUMN IF NOT EXISTS badge text DEFAULT 'Team';
+ALTER TABLE public.team_members ADD COLUMN IF NOT EXISTS linkedin_url text;
+ALTER TABLE public.team_members ADD COLUMN IF NOT EXISTS github_url text;
+ALTER TABLE public.team_members ADD COLUMN IF NOT EXISTS twitter_url text;
+ALTER TABLE public.team_members ADD COLUMN IF NOT EXISTS email text;
+
+-- RLS
+ALTER TABLE public.team_members ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read access to team_members" ON public.team_members;
+DROP POLICY IF EXISTS "Allow admin to modify team_members" ON public.team_members;
+
+CREATE POLICY "Allow public read access to team_members" ON public.team_members
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow admin to modify team_members" ON public.team_members
+    FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- Default Seed Data (Founder + C-Suite)
+INSERT INTO public.team_members (name, role, badge, bio, skills, sort_order)
+VALUES
+(
+    'John Enrico Santiago',
+    'Founder & CEO',
+    'Founder',
+    'Visionary technologist and lead architect of Next Technology. Building minimalist, high-performance digital products that empower brands and delight users.',
+    '["Full-Stack Development", "Product Strategy", "UI/UX Design", "System Architecture"]'::jsonb,
+    0
+),
+(
+    'Chief Technology Officer',
+    'Chief Technology Officer',
+    'C-Level',
+    'Oversees the technical direction of the company — from infrastructure and cloud systems to AI integrations and security frameworks.',
+    '["Cloud Infrastructure", "System Architecture", "AI & ML", "Security Engineering"]'::jsonb,
+    1
+),
+(
+    'Chief Operating Officer',
+    'Chief Operating Officer',
+    'C-Level',
+    'Drives operational excellence, client delivery pipelines, and the internal systems that keep Next Technology running at peak performance.',
+    '["Operations Management", "Client Relations", "Project Delivery", "Business Scaling"]'::jsonb,
+    2
+),
+(
+    'Chief Design Officer',
+    'Chief Design Officer',
+    'C-Level',
+    'Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NexTech visual language.',
+    '["UI/UX Design", "Brand Identity", "Design Systems", "Creative Direction"]'::jsonb,
+    3
+)
+ON CONFLICT DO NOTHING;
+
+-- Grant access for new table
+GRANT ALL ON public.team_members TO postgres, anon, authenticated, service_role;
+
+-- --------------------------------------------------
+-- 8. FAQs Table (SEO / AEO / GEO)
+-- --------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS public.faqs (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    question text NOT NULL,
+    answer text NOT NULL,
+    category text DEFAULT 'General',
+    sort_order int4 DEFAULT 0,
+    created_at timestamptz DEFAULT now()
+);
+
+-- Migration: safe to run on existing databases
+ALTER TABLE public.faqs ADD COLUMN IF NOT EXISTS category text DEFAULT 'General';
+
+-- RLS
+ALTER TABLE public.faqs ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read access to faqs" ON public.faqs;
+DROP POLICY IF EXISTS "Allow admin to modify faqs" ON public.faqs;
+
+CREATE POLICY "Allow public read access to faqs" ON public.faqs
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow admin to modify faqs" ON public.faqs
+    FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- Default Seed Data (AEO/GEO-optimized answers)
+INSERT INTO public.faqs (question, answer, category, sort_order) VALUES
+(
+    'How much does a website cost in the Philippines?',
+    'Website pricing at Next Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.',
+    'Pricing',
+    0
+),
+(
+    'How long does it take to build a website?',
+    'A standard website typically takes 1–2 months from kickoff to launch. Rush projects can be delivered in 2–4 weeks, while relaxed timelines with no hard deadline extend to 3+ months. Timeline depends on project complexity, the number of revision rounds, and how quickly feedback is provided.',
+    'Process',
+    1
+),
+(
+    'What types of websites does Next Technology build?',
+    'We build landing pages, business websites, portfolio websites, web applications, e-commerce stores, and blog platforms. Every project is engineered for speed, SEO, and mobile responsiveness — with a minimalist, high-performance design philosophy.',
+    'Services',
+    2
+),
+(
+    'What technologies do you use?',
+    'We use modern web technologies including HTML5, CSS3, JavaScript (ES6+), and frameworks like React and Next.js for complex apps. For backend and databases we use Supabase (PostgreSQL), and for deployment we use Vercel, Netlify, and shared hosting. Every build is clean, semantic, and optimized for performance.',
+    'Services',
+    3
+),
+(
+    'Do you offer website maintenance after launch?',
+    'Yes. We offer post-launch support including bug fixes, content updates, security patches, and performance monitoring. Maintenance plans can be arranged on a retainer or per-request basis depending on the scope of your site.',
+    'Services',
+    4
+),
+(
+    'How do I get started with a project?',
+    'Getting started is simple: fill out the Project Planner on our website to configure your website type, features, budget, and timeline. Our team will review your submission and reach out within 24–48 hours to discuss next steps. No commitment required to get a quote.',
+    'Process',
+    5
+),
+(
+    'Do you work with clients outside the Philippines?',
+    'Yes. Next Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.',
+    'General',
+    6
+),
+(
+    'What is included in a website development package?',
+    'All our website packages include custom design, clean semantic code, mobile responsiveness, basic SEO setup (meta tags, sitemap, structured data), and one round of revisions. Additional pages, animations, contact forms, admin panels, and e-commerce features are available as add-ons.',
+    'Services',
+    7
+)
+ON CONFLICT DO NOTHING;
+
+-- Grant access for new table
+GRANT ALL ON public.faqs TO postgres, anon, authenticated, service_role;
