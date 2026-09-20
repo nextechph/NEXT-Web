@@ -3122,8 +3122,25 @@
                     <textarea id="tm-bio-${i}" style="min-height:80px" placeholder="A brief description of this person's role, vision, and expertise...">${m.bio || ''}</textarea>
                 </div>
                 <div class="form-group">
-                    <label>Photo URL</label>
-                    <input type="text" id="tm-img-${i}" value="${m.image_url || ''}" placeholder="https://... (leave blank for initials avatar)">
+                    <label>Profile Picture</label>
+                    <div style="display:flex;gap:16px;align-items:center;margin-top:6px;flex-wrap:wrap;">
+                        <!-- Thumbnail Preview -->
+                        <div id="tm-preview-wrap-${i}" style="width:76px;height:76px;border:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">
+                            ${m.image_url
+                                ? `<img src="${m.image_url}" id="tm-preview-img-${i}" style="width:100%;height:100%;object-fit:cover;">`
+                                : `<span id="tm-preview-empty-${i}" style="font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;text-align:center;padding:4px;">No Photo</span>`}
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:220px;">
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <label class="btn-secondary" style="cursor:pointer;padding:7px 14px;font-size:0.75rem;margin:0;display:inline-flex;align-items:center;gap:6px;">
+                                    <span>Upload Picture</span>
+                                    <input type="file" accept="image/*" style="display:none;" onchange="handleTeamPhotoUpload(event, ${i})">
+                                </label>
+                                <button type="button" class="btn-danger" onclick="clearTeamPhoto(${i})" style="padding:7px 12px;font-size:0.75rem;">✕ Remove</button>
+                            </div>
+                            <input type="text" id="tm-img-${i}" value="${m.image_url || ''}" placeholder="Or paste image URL / local path (e.g. assets/team/john.jpg)" oninput="updateTeamPhotoPreview(this.value, ${i})">
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Skills / Specialties <span style="color:var(--text3);font-weight:400;">(comma-separated)</span></label>
@@ -3151,6 +3168,70 @@
                     </div>
                 </div>
             </div>`).join('');
+        }
+
+        function updateTeamPhotoPreview(url, i) {
+            const wrap = document.getElementById(`tm-preview-wrap-${i}`);
+            if (!wrap) return;
+            const cleanUrl = (url || '').trim();
+            if (cleanUrl) {
+                wrap.innerHTML = `<img src="${cleanUrl}" id="tm-preview-img-${i}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=\\'font-size:0.65rem;color:#ff4444;text-align:center;padding:4px;\\'>Invalid Image</span>'">`;
+            } else {
+                wrap.innerHTML = `<span id="tm-preview-empty-${i}" style="font-size:0.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;text-align:center;padding:4px;">No Photo</span>`;
+            }
+        }
+
+        function clearTeamPhoto(i) {
+            const input = document.getElementById(`tm-img-${i}`);
+            if (input) input.value = '';
+            updateTeamPhotoPreview('', i);
+            showToast('Picture cleared.');
+        }
+
+        function handleTeamPhotoUpload(event, i) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            showToast('Processing photo...');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    // Compress image using offscreen canvas to max 700px
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 700;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height = Math.round((height * MAX_SIZE) / width);
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width = Math.round((width * MAX_SIZE) / height);
+                            height = MAX_SIZE;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    const input = document.getElementById(`tm-img-${i}`);
+                    if (input) input.value = compressedDataUrl;
+
+                    updateTeamPhotoPreview(compressedDataUrl, i);
+                    showToast('Picture uploaded! Remember to click "Save Team".');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function updateTeamCardTitle(input, i) {

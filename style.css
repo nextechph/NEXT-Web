@@ -1525,11 +1525,10 @@ body.page-leaving {
 .leader-card {
     background-color: var(--card-bg);
     border: 1px solid var(--border);
-    padding: 36px;
+    padding: 0;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 20px;
     overflow: hidden;
     transition: var(--transition-smooth);
 }
@@ -1544,6 +1543,7 @@ body.page-leaving {
     opacity: 0;
     transition: var(--transition-smooth);
     pointer-events: none;
+    z-index: 1;
 }
 
 @media (hover: hover) {
@@ -1559,24 +1559,136 @@ body.page-leaving {
 
 /* ── Founder card accent ── */
 .leader-card.founder {
-    border-color: rgba(var(--accent-rgb), 0.2);
-    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(var(--accent-rgb), 0.02) 100%);
+    border-color: rgba(var(--accent-rgb), 0.25);
+    background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.03) 0%, var(--card-bg) 100%);
 }
 
 @media (hover: hover) {
     .leader-card.founder:hover {
-        border-color: rgba(var(--accent-rgb), 0.45);
+        border-color: rgba(var(--accent-rgb), 0.55);
+        box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
     }
 }
 
-/* ── Card Top Row ── */
+/* ── Portrait Photo Area ── */
+.leader-photo-wrapper {
+    position: relative;
+    width: 100%;
+    height: 290px;
+    background: var(--bg-secondary);
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leader-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+}
+
+@media (hover: hover) {
+    .leader-card:hover .leader-photo {
+        transform: scale(1.05);
+    }
+}
+
+.leader-photo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 90px;
+    background: linear-gradient(to top, rgba(10, 10, 10, 0.85) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.leader-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.35) 100%);
+    position: relative;
+}
+
+.leader-initials-badge {
+    width: 76px;
+    height: 76px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 2;
+    transition: var(--transition-smooth);
+}
+
+.leader-card.founder .leader-initials-badge {
+    border-color: rgba(var(--accent-rgb), 0.5);
+    color: var(--accent);
+    box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.18);
+}
+
+.leader-photo-tag {
+    font-family: var(--font-heading);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    z-index: 2;
+}
+
+.leader-photo-wrapper .leader-badge-pill {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 3;
+    margin-bottom: 0;
+    backdrop-filter: blur(8px);
+    background: rgba(10, 10, 10, 0.75);
+}
+
+/* ── Content below photo ── */
+.leader-content {
+    padding: 28px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+    position: relative;
+    z-index: 2;
+}
+
+.leader-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Backward compatibility for small avatar cards */
 .leader-top {
     display: flex;
     align-items: flex-start;
     gap: 16px;
 }
 
-/* ── Avatar ── */
 .leader-avatar {
     width: 64px;
     height: 64px;
