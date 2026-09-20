@@ -1,4 +1,4 @@
--- NexTech Website Supabase Database Setup Schema
+-- NEXT Technology Website Supabase Database Setup Schema
 -- Run this script in the Supabase SQL Editor
 -- This script is fully idempotent — safe to run multiple times.
 
@@ -148,13 +148,13 @@ VALUES (
     1, 
     'Empowering Innovation', 
     'We build cutting-edge digital products and custom software solutions designed to help your business grow and thrive.',
-    'NexTech is a leading software development and design agency specializing in modern web solutions, mobile apps, and enterprise software.',
-    '© 2026 NexTech. All rights reserved.',
+    'NEXT Technology is a leading software development and design agency specializing in modern web solutions, mobile apps, and enterprise software.',
+    '© 2026 NEXT Technology. All rights reserved.',
     'nextechnology.com',
-    'facebook.com/nextech',
-    'twitter.com/nextech',
-    'instagram.com/nextech',
-    'tiktok.com/@nextech',
+    'facebook.com/nextechnology',
+    'twitter.com/nextechnology',
+    'instagram.com/nextechnology',
+    'tiktok.com/@nextechnology',
     'hello@nextechnology.com',
     'Global / Distributed Remote'
 )
@@ -344,7 +344,7 @@ VALUES
     'John Enrico Santiago',
     'Founder & CEO',
     'Founder',
-    'Visionary technologist and lead architect of Next Technology. Building minimalist, high-performance digital products that empower brands and delight users.',
+    'Visionary technologist and lead architect of NEXT Technology. Building minimalist, high-performance digital products that empower brands and delight users.',
     '["Full-Stack Development", "Product Strategy", "UI/UX Design", "System Architecture"]'::jsonb,
     0
 ),
@@ -360,7 +360,7 @@ VALUES
     'Chief Operating Officer',
     'Chief Operating Officer',
     'C-Level',
-    'Drives operational excellence, client delivery pipelines, and the internal systems that keep Next Technology running at peak performance.',
+    'Drives operational excellence, client delivery pipelines, and the internal systems that keep NEXT Technology running at peak performance.',
     '["Operations Management", "Client Relations", "Project Delivery", "Business Scaling"]'::jsonb,
     2
 ),
@@ -368,7 +368,7 @@ VALUES
     'Chief Design Officer',
     'Chief Design Officer',
     'C-Level',
-    'Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NexTech visual language.',
+    'Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NEXT Technology visual language.',
     '["UI/UX Design", "Brand Identity", "Design Systems", "Creative Direction"]'::jsonb,
     3
 )
@@ -409,7 +409,7 @@ CREATE POLICY "Allow admin to modify faqs" ON public.faqs
 INSERT INTO public.faqs (question, answer, category, sort_order) VALUES
 (
     'How much does a website cost in the Philippines?',
-    'Website pricing at Next Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.',
+    'Website pricing at NEXT Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.',
     'Pricing',
     0
 ),
@@ -420,7 +420,7 @@ INSERT INTO public.faqs (question, answer, category, sort_order) VALUES
     1
 ),
 (
-    'What types of websites does Next Technology build?',
+    'What types of websites does NEXT Technology build?',
     'We build landing pages, business websites, portfolio websites, web applications, e-commerce stores, and blog platforms. Every project is engineered for speed, SEO, and mobile responsiveness — with a minimalist, high-performance design philosophy.',
     'Services',
     2
@@ -445,7 +445,7 @@ INSERT INTO public.faqs (question, answer, category, sort_order) VALUES
 ),
 (
     'Do you work with clients outside the Philippines?',
-    'Yes. Next Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.',
+    'Yes. NEXT Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.',
     'General',
     6
 ),

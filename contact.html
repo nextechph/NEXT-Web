@@ -8,9 +8,9 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="apple-touch-icon" href="assets/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Next Technology</title>
+    <title>Contact | NEXT Technology</title>
     <meta name="description"
-        content="Start a conversation with NexTech. Tell us about your project and we'll get back to you shortly.">
+        content="Start a conversation with NEXT Technology. Tell us about your project and we'll get back to you shortly.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -166,7 +166,7 @@
     <header class="header">
         <div class="nav-container">
             <a href="index.html" class="logo-group">
-                <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+                <img src="assets/logo.png" alt="NEXT Technology Logo" class="logo-img">
             </a>
 
             <nav class="nav-links">
@@ -224,10 +224,10 @@
 
                 <div class="contact-layout">
                     <!-- Contact Info -->
-                    <div class="contact-info">
-                        <div class="info-group">
-                            <h3>Next Technology</h3>
-                            <p>Modern Websites. Digital Solutions.</p>
+                        <div class="info-content">
+                            <span class="info-label">Office</span>
+                            <h3>NEXT Technology</h3>
+                            <p id="contactLocation">Metro Manila, Philippines</p>
                         </div>
                         <div class="info-details">
                             <div class="info-item">
@@ -315,7 +315,7 @@
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="logo-group">
-                    <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+                    <img src="assets/logo.png" alt="NEXT Technology Logo" class="logo-img">
                 </div>
                 <p class="footer-desc">Premium digital engineering and clean-cut UI/UX design. We design and construct
                     digital foundations for high-tier brands.</p>
@@ -367,7 +367,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Next Technology. All rights reserved. Designed with precision.</p>
+            <p>&copy; 2026 NEXT Technology. All rights reserved. Designed with precision.</p>
         </div>
     </footer>
 
@@ -421,8 +421,8 @@
             await loadContactMethods();
 
             // Pre-fill from Planner blueprint via sessionStorage
-            const rawDataStr = sessionStorage.getItem('nextech_blueprint_raw');
-            const blueprintData = sessionStorage.getItem('nextech_blueprint');
+            const rawDataStr = sessionStorage.getItem('next_blueprint_raw') || sessionStorage.getItem('nextech_blueprint_raw');
+            const blueprintData = sessionStorage.getItem('next_blueprint') || sessionStorage.getItem('nextech_blueprint');
 
             if (rawDataStr) {
                 try {
@@ -522,6 +522,8 @@
                 try {
                     if (contactForm) contactForm._blueprintRaw = JSON.parse(rawDataStr);
                 } catch(e) {}
+                sessionStorage.removeItem('next_blueprint');
+                sessionStorage.removeItem('next_blueprint_raw');
                 sessionStorage.removeItem('nextech_blueprint');
                 sessionStorage.removeItem('nextech_blueprint_raw');
             }

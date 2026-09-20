@@ -8,9 +8,9 @@
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="apple-touch-icon" href="assets/favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Planner | Next Technology</title>
+    <title>Project Planner | NEXT Technology</title>
     <meta name="description"
-        content="Configure your custom project blueprint — select services, budget, and timeline to get started with NexTech.">
+        content="Configure your custom project blueprint — select services, budget, and timeline to get started with NEXT Technology.">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -684,7 +684,7 @@
     <header class="header">
         <div class="nav-container">
             <a href="index.html" class="logo-group">
-                <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+                <img src="assets/logo.png" alt="NEXT Technology Logo" class="logo-img">
             </a>
 
             <nav class="nav-links">
@@ -1083,7 +1083,7 @@
         <div class="footer-container">
             <div class="footer-brand">
                 <div class="logo-group">
-                    <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+                    <img src="assets/logo.png" alt="NEXT Technology Logo" class="logo-img">
                 </div>
                 <p class="footer-desc">Premium digital engineering and clean-cut UI/UX design. We design and construct
                     digital foundations for high-tier brands.</p>
@@ -1134,7 +1134,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Next Technology. All rights reserved. Designed with precision.</p>
+            <p>&copy; 2026 NEXT Technology. All rights reserved. Designed with precision.</p>
         </div>
     </footer>
 
@@ -1371,7 +1371,7 @@
                     const addons = Array.from(checkboxes).map(cb => cb.dataset.label).join(', ') || 'None';
                     const total = document.getElementById('billTotal').textContent;
                     const formattedDesc =
-                        `Hello NexTech team, I have built a Student Project blueprint:\n` +
+                        `Hello NEXT Technology team, I have built a Student Project blueprint:\n` +
                         `- Plan: Student Starter Package\n` +
                         `- Add-ons: ${addons}\n` +
                         `- Total Estimate: ${total} (Student Pricing)\n` +
@@ -1387,8 +1387,8 @@
                         estimate: 'Student Pricing'
                     };
 
-                    sessionStorage.setItem('nextech_blueprint_raw', JSON.stringify(rawData));
-                    sessionStorage.setItem('nextech_blueprint', formattedDesc);
+                    sessionStorage.setItem('next_blueprint_raw', JSON.stringify(rawData));
+                    sessionStorage.setItem('next_blueprint', formattedDesc);
                     window.location.href = 'contact.html';
                 });
             }
@@ -1591,8 +1591,8 @@
                         (phone ? `— Phone: ${phone}\n` : '') +
                         `\nPlease schedule a discovery call with me.`;
 
-                    sessionStorage.setItem('nextech_blueprint_raw', JSON.stringify(rawData));
-                    sessionStorage.setItem('nextech_blueprint', formattedDesc);
+                    sessionStorage.setItem('next_blueprint_raw', JSON.stringify(rawData));
+                    sessionStorage.setItem('next_blueprint', formattedDesc);
                     window.location.href = 'contact.html';
                 });
             }

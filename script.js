@@ -258,11 +258,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Pre-fill contact form from Planner blueprint (passed via sessionStorage)
-    const blueprintData = sessionStorage.getItem('nextech_blueprint');
+    const blueprintData = sessionStorage.getItem('next_blueprint') || sessionStorage.getItem('nextech_blueprint');
     if (blueprintData) {
         const projectDetailsField = document.getElementById('projectDetails');
         if (projectDetailsField) {
             projectDetailsField.value = blueprintData;
+            sessionStorage.removeItem('next_blueprint');
             sessionStorage.removeItem('nextech_blueprint');
         }
     }
