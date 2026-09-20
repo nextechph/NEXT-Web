@@ -553,9 +553,12 @@
         <!-- Filter Bar -->
         <div class="team-filter-bar fade-in" id="teamFilterBar">
             <button class="team-filter-btn active" data-filter="all" onclick="filterTeam('all', this)">All Members</button>
-            <button class="team-filter-btn" data-filter="Founder" onclick="filterTeam('Founder', this)">Founders</button>
-            <button class="team-filter-btn" data-filter="C-Level" onclick="filterTeam('C-Level', this)">C-Suite / Executives</button>
-            <button class="team-filter-btn" data-filter="Engineering" onclick="filterTeam('Engineering', this)">Engineering &amp; Design</button>
+            <button class="team-filter-btn" data-filter="Founder" onclick="filterTeam('Founder', this)">Founder</button>
+            <button class="team-filter-btn" data-filter="C-Level" onclick="filterTeam('C-Level', this)">C-Level</button>
+            <button class="team-filter-btn" data-filter="Engineering" onclick="filterTeam('Engineering', this)">Engineering</button>
+            <button class="team-filter-btn" data-filter="Design" onclick="filterTeam('Design', this)">Design</button>
+            <button class="team-filter-btn" data-filter="Director" onclick="filterTeam('Director', this)">Director</button>
+            <button class="team-filter-btn" data-filter="Team" onclick="filterTeam('Team', this)">Team</button>
         </div>
 
         <!-- Team Grid Section -->
@@ -763,15 +766,16 @@
             return links.length ? `<div class="leader-socials">${links.join('')}</div>` : '';
         }
 
-        function renderTeamCards(members, isAnimated = true) {
+        function renderTeamCards(members, isAnimated = true, currentFilter = '') {
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
 
             if (!members || members.length === 0) {
+                const categoryLabel = (currentFilter && currentFilter !== 'all') ? `${currentFilter} ` : '';
                 grid.innerHTML = `
                     <div class="card-enter" style="grid-column: 1 / -1; text-align: center; padding: 70px 24px; border: 1px dashed var(--border); background: var(--card-bg);">
                         <div style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-primary); margin-bottom: 8px;">
-                            No Profiles in this Department Yet
+                            No ${categoryLabel}Profiles Found
                         </div>
                         <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 440px; margin: 0 auto; line-height: 1.6;">
                             Team members in this category will appear here once configured in the leadership registry.
@@ -870,33 +874,44 @@
                 filtered = allTeamMembers.filter(m => {
                     const badge = (m.badge || '').trim().toLowerCase();
                     const role = (m.role || '').trim().toLowerCase();
+                    const target = filter.toLowerCase();
 
-                    const isFounder = badge.includes('founder') || role.includes('founder');
-                    const isCLevel = badge.includes('c-level') || badge.includes('c-suite') || badge.includes('executive') || badge.includes('director') ||
-                                     role.includes('chief') || role.includes('ceo') || role.includes('cto') || role.includes('cmo') || role.includes('coo') || role.includes('cfo') || role.includes('cpo') || role.includes('cio') || role.includes('president') || role.includes('vp');
+                    // Direct match from the admin dropdown value
+                    if (badge === target) return true;
 
-                    if (filter === 'Founder') {
-                        return isFounder;
+                    if (target === 'founder') {
+                        return badge.includes('founder') || role.includes('founder');
                     }
 
-                    if (filter === 'C-Level') {
-                        return isCLevel;
+                    if (target === 'c-level') {
+                        return badge.includes('c-level') || badge.includes('c-suite') || badge.includes('executive') ||
+                               role.includes('chief') || role.includes('ceo') || role.includes('cto') || role.includes('cmo') || role.includes('coo') || role.includes('cfo') || role.includes('cpo') || role.includes('cio') || role.includes('president') || role.includes('vp');
                     }
 
-                    if (filter === 'Engineering') {
-                        // C-Level executives and Founders must never appear under Engineering & Design
-                        if (isFounder || isCLevel) return false;
-
-                        // Match engineers, designers, developers, architects, and technical contributors
-                        return badge.includes('engineering') || badge.includes('design') || badge.includes('developer') || badge.includes('tech') || badge.includes('team') ||
-                               role.includes('architect') || role.includes('engineer') || role.includes('design') || role.includes('developer') || role.includes('ui') || role.includes('ux') || role.includes('frontend') || role.includes('backend') || role.includes('full-stack') || role.includes('dev');
+                    if (target === 'director') {
+                        return badge.includes('director') || role.includes('director');
                     }
 
-                    return true;
+                    if (target === 'engineering') {
+                        if (badge.includes('c-level') || badge.includes('founder') || badge.includes('director')) return false;
+                        return badge.includes('engineering') || badge.includes('developer') ||
+                               role.includes('architect') || role.includes('engineer') || role.includes('developer') || role.includes('frontend') || role.includes('backend') || role.includes('full-stack') || role.includes('dev');
+                    }
+
+                    if (target === 'design') {
+                        if (badge.includes('c-level') || badge.includes('founder') || badge.includes('director')) return false;
+                        return badge.includes('design') || role.includes('design') || role.includes('ui') || role.includes('ux') || role.includes('creative');
+                    }
+
+                    if (target === 'team') {
+                        return badge.includes('team') || (!badge.includes('founder') && !badge.includes('c-level') && !badge.includes('director') && !badge.includes('engineering') && !badge.includes('design'));
+                    }
+
+                    return badge.includes(target);
                 });
             }
 
-            renderTeamCards(filtered, true);
+            renderTeamCards(filtered, true, filter);
 
             if (grid) {
                 void grid.offsetWidth; // Force reflow to cleanly trigger entry animation
