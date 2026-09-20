@@ -342,7 +342,7 @@ CREATE POLICY "Allow public read access to team_members" ON public.team_members
 CREATE POLICY "Allow admin to modify team_members" ON public.team_members
     FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- Default Seed Data (Founder + C-Suite)
+-- Default Seed Data (Founder)
 INSERT INTO public.team_members (name, role, badge, bio, skills, sort_order)
 VALUES
 (
@@ -352,30 +352,6 @@ VALUES
     'Visionary technologist and lead architect of NEXT Technology. Building minimalist, high-performance digital products that empower brands and delight users.',
     '["Full-Stack Development", "Product Strategy", "UI/UX Design", "System Architecture"]'::jsonb,
     0
-),
-(
-    'Chief Technology Officer',
-    'Chief Technology Officer',
-    'C-Level',
-    'Oversees the technical direction of the company — from infrastructure and cloud systems to AI integrations and security frameworks.',
-    '["Cloud Infrastructure", "System Architecture", "AI & ML", "Security Engineering"]'::jsonb,
-    1
-),
-(
-    'Chief Operating Officer',
-    'Chief Operating Officer',
-    'C-Level',
-    'Drives operational excellence, client delivery pipelines, and the internal systems that keep NEXT Technology running at peak performance.',
-    '["Operations Management", "Client Relations", "Project Delivery", "Business Scaling"]'::jsonb,
-    2
-),
-(
-    'Chief Design Officer',
-    'Chief Design Officer',
-    'C-Level',
-    'Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NEXT Technology visual language.',
-    '["UI/UX Design", "Brand Identity", "Design Systems", "Creative Direction"]'::jsonb,
-    3
 )
 ON CONFLICT DO NOTHING;
 
