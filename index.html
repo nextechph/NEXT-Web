@@ -555,9 +555,18 @@
                     return;
                 }
 
-                localStorage.setItem('nt_faqs', JSON.stringify(faqs));
-                renderFaqList(faqs);
-                injectFaqSchema(faqs);
+                // Deduplication guard: ensure only unique questions are displayed
+                const seen = new Set();
+                const uniqueFaqs = faqs.filter(f => {
+                    const q = (f.question || '').trim().toLowerCase();
+                    if (!q || seen.has(q)) return false;
+                    seen.add(q);
+                    return true;
+                });
+
+                localStorage.setItem('nt_faqs', JSON.stringify(uniqueFaqs));
+                renderFaqList(uniqueFaqs);
+                injectFaqSchema(uniqueFaqs);
             } catch (e) {
                 console.error('Error loading FAQs:', e);
                 injectSchemaFromDOM();

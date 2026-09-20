@@ -364,15 +364,30 @@ GRANT ALL ON public.team_members TO postgres, anon, authenticated, service_role;
 
 CREATE TABLE IF NOT EXISTS public.faqs (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    question text NOT NULL,
+    question text NOT NULL UNIQUE,
     answer text NOT NULL,
     category text DEFAULT 'General',
     sort_order int4 DEFAULT 0,
     created_at timestamptz DEFAULT now()
 );
 
--- Migration: safe to run on existing databases
+-- Migration: safe to run on existing databases (clean up duplicates and add unique constraint)
 ALTER TABLE public.faqs ADD COLUMN IF NOT EXISTS category text DEFAULT 'General';
+
+DO $$
+BEGIN
+    -- Deduplicate existing rows if any
+    DELETE FROM public.faqs a
+    USING public.faqs b
+    WHERE a.ctid < b.ctid AND a.question = b.question;
+
+    -- Enforce unique question
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'faqs_question_key'
+    ) THEN
+        ALTER TABLE public.faqs ADD CONSTRAINT faqs_question_key UNIQUE (question);
+    END IF;
+END $$;
 
 -- RLS
 ALTER TABLE public.faqs ENABLE ROW LEVEL SECURITY;
@@ -436,7 +451,7 @@ INSERT INTO public.faqs (question, answer, category, sort_order) VALUES
     'Services',
     7
 )
-ON CONFLICT DO NOTHING;
+ON CONFLICT (question) DO NOTHING;
 
 -- Grant access for new table
 GRANT ALL ON public.faqs TO postgres, anon, authenticated, service_role;

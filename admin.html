@@ -3768,7 +3768,17 @@
                 renderFaqEditorWithData(FAQ_DEFAULTS);
                 return;
             }
-            renderFaqEditorWithData(data);
+
+            // Client-side deduplication guard: keep only unique questions
+            const seen = new Set();
+            const uniqueFaqs = data.filter(f => {
+                const q = (f.question || '').trim().toLowerCase();
+                if (!q || seen.has(q)) return false;
+                seen.add(q);
+                return true;
+            });
+
+            renderFaqEditorWithData(uniqueFaqs);
         }
 
         function getFaqDraft() {
