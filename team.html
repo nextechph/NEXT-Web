@@ -196,6 +196,33 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 28px;
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-grid-container.grid-exiting {
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            pointer-events: none;
+        }
+
+        @keyframes cardEntranceStagger {
+            0% {
+                opacity: 0;
+                transform: translateY(28px) scale(0.97);
+            }
+            60% {
+                opacity: 0.92;
+                transform: translateY(-2px) scale(1.005);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .leader-card.card-enter {
+            animation: cardEntranceStagger 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+            will-change: transform, opacity;
         }
 
         /* ── Enhanced Leader Card ── */
@@ -736,13 +763,13 @@
             return links.length ? `<div class="leader-socials">${links.join('')}</div>` : '';
         }
 
-        function renderTeamCards(members) {
+        function renderTeamCards(members, isAnimated = true) {
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
 
             if (!members || members.length === 0) {
                 grid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 70px 24px; border: 1px dashed var(--border); background: var(--card-bg);">
+                    <div class="card-enter" style="grid-column: 1 / -1; text-align: center; padding: 70px 24px; border: 1px dashed var(--border); background: var(--card-bg);">
                         <div style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-primary); margin-bottom: 8px;">
                             No Profiles in this Department Yet
                         </div>
@@ -760,7 +787,9 @@
                 const isFounder = badgeLower.includes('founder');
                 const isCLevel = badgeLower.includes('c-level') || badgeLower.includes('c-suite') || badgeLower.includes('director') || badgeLower.includes('executive');
                 const badgeClass = isFounder ? 'founder-badge' : (isCLevel ? 'clevel-badge' : 'team-badge');
-                const cardClass = isFounder ? 'leader-card founder reveal visible' : 'leader-card reveal visible';
+                const cardClass = isFounder ? 'leader-card founder' : 'leader-card';
+                const animClass = isAnimated ? 'card-enter' : 'reveal visible';
+                const delayStyle = isAnimated ? `style="animation-delay:${i * 70}ms"` : '';
                 const skills = Array.isArray(m.skills) ? m.skills : [];
                 const skillsHtml = skills.map(s => `<span class="leader-skill-tag">${s}</span>`).join('');
 
@@ -776,7 +805,7 @@
                        </div>`;
 
                 return `
-                <div class="${cardClass}" data-badge="${m.badge || 'Team'}" style="animation-delay:${i * 60}ms">
+                <div class="${cardClass} ${animClass}" data-badge="${m.badge || 'Team'}" ${delayStyle}>
                     <div class="leader-card-bg-glow"></div>
                     <div class="leader-photo-wrapper">
                         ${photoBlock}
@@ -814,46 +843,69 @@
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        function filterTeam(filter, btn) {
+        let isFilterSwitching = false;
+
+        async function filterTeam(filter, btn) {
+            if (btn && btn.classList.contains('active')) return;
+            if (isFilterSwitching) return;
+            isFilterSwitching = true;
+
             document.querySelectorAll('.team-filter-btn').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
 
-            if (!allTeamMembers || !allTeamMembers.length) return;
+            const grid = document.getElementById('teamGrid');
+            if (grid) {
+                grid.classList.add('grid-exiting');
+                await new Promise(r => setTimeout(r, 190));
+            }
 
-            if (filter === 'all') {
-                renderTeamCards(allTeamMembers);
+            if (!allTeamMembers || !allTeamMembers.length) {
+                if (grid) grid.classList.remove('grid-exiting');
+                isFilterSwitching = false;
                 return;
             }
 
-            const filtered = allTeamMembers.filter(m => {
-                const badge = (m.badge || '').trim().toLowerCase();
-                const role = (m.role || '').trim().toLowerCase();
+            let filtered = allTeamMembers;
+            if (filter !== 'all') {
+                filtered = allTeamMembers.filter(m => {
+                    const badge = (m.badge || '').trim().toLowerCase();
+                    const role = (m.role || '').trim().toLowerCase();
 
-                const isFounder = badge.includes('founder') || role.includes('founder');
-                const isCLevel = badge.includes('c-level') || badge.includes('c-suite') || badge.includes('executive') || badge.includes('director') ||
-                                 role.includes('chief') || role.includes('ceo') || role.includes('cto') || role.includes('cmo') || role.includes('coo') || role.includes('cfo') || role.includes('cpo') || role.includes('cio') || role.includes('president') || role.includes('vp');
+                    const isFounder = badge.includes('founder') || role.includes('founder');
+                    const isCLevel = badge.includes('c-level') || badge.includes('c-suite') || badge.includes('executive') || badge.includes('director') ||
+                                     role.includes('chief') || role.includes('ceo') || role.includes('cto') || role.includes('cmo') || role.includes('coo') || role.includes('cfo') || role.includes('cpo') || role.includes('cio') || role.includes('president') || role.includes('vp');
 
-                if (filter === 'Founder') {
-                    return isFounder;
-                }
+                    if (filter === 'Founder') {
+                        return isFounder;
+                    }
 
-                if (filter === 'C-Level') {
-                    return isCLevel;
-                }
+                    if (filter === 'C-Level') {
+                        return isCLevel;
+                    }
 
-                if (filter === 'Engineering') {
-                    // C-Level executives and Founders must never appear under Engineering & Design
-                    if (isFounder || isCLevel) return false;
+                    if (filter === 'Engineering') {
+                        // C-Level executives and Founders must never appear under Engineering & Design
+                        if (isFounder || isCLevel) return false;
 
-                    // Match engineers, designers, developers, architects, and technical contributors
-                    return badge.includes('engineering') || badge.includes('design') || badge.includes('developer') || badge.includes('tech') || badge.includes('team') ||
-                           role.includes('architect') || role.includes('engineer') || role.includes('design') || role.includes('developer') || role.includes('ui') || role.includes('ux') || role.includes('frontend') || role.includes('backend') || role.includes('full-stack') || role.includes('dev');
-                }
+                        // Match engineers, designers, developers, architects, and technical contributors
+                        return badge.includes('engineering') || badge.includes('design') || badge.includes('developer') || badge.includes('tech') || badge.includes('team') ||
+                               role.includes('architect') || role.includes('engineer') || role.includes('design') || role.includes('developer') || role.includes('ui') || role.includes('ux') || role.includes('frontend') || role.includes('backend') || role.includes('full-stack') || role.includes('dev');
+                    }
 
-                return true;
-            });
+                    return true;
+                });
+            }
 
-            renderTeamCards(filtered);
+            renderTeamCards(filtered, true);
+
+            if (grid) {
+                void grid.offsetWidth; // Force reflow to cleanly trigger entry animation
+                grid.classList.remove('grid-exiting');
+            }
+
+            setTimeout(() => {
+                isFilterSwitching = false;
+            }, 320);
         }
     </script>
 </body>
