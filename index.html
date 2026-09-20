@@ -74,7 +74,7 @@
                 <a href="planner.html" class="nav-link">Planner</a>
                 <a href="contact.html" class="nav-link">Contact</a>
                 <a href="blog.html" class="nav-link">Blog</a>
-                <a href="#leadership" class="nav-link">Team</a>
+                <a href="team.html" class="nav-link">Team</a>
             </nav>
 
             <div class="nav-actions">
@@ -96,7 +96,7 @@
             <a href="planner.html" class="mobile-nav-link">Planner</a>
             <a href="contact.html" class="mobile-nav-link">Contact</a>
             <a href="blog.html" class="mobile-nav-link">Blog</a>
-            <a href="#leadership" class="mobile-nav-link">Team</a>
+            <a href="team.html" class="mobile-nav-link">Team</a>
             <a href="planner.html" class="btn-primary mobile-btn">Start Project</a>
         </div>
     </header>
@@ -242,102 +242,6 @@
 
     </main>
 
-    <!-- Leadership & Founders Section -->
-    <section class="leadership-section" id="leadership">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">LEADERSHIP</span>
-                <h2 class="section-title">The Minds Behind What's Next</h2>
-                <p class="section-subtitle">Driven by innovation, precision engineering, and a relentless commitment to minimalist excellence.</p>
-            </div>
-
-            <!-- Dynamic cards injected here by JS; static fallback shown while loading -->
-            <div class="leadership-grid" id="leadershipGrid">
-                <!-- Fallback: rendered immediately, replaced by dynamic data -->
-                <div class="leader-card founder reveal">
-                    <div class="leader-card-bg-glow"></div>
-                    <div class="leader-top">
-                        <div class="leader-avatar" data-initials="JE">
-                            <span class="leader-initials">JE</span>
-                        </div>
-                        <div class="leader-meta">
-                            <div class="leader-badge-pill founder-badge">Founder</div>
-                            <h3 class="leader-name">John Enrico Santiago</h3>
-                            <div class="leader-role">Founder &amp; CEO</div>
-                        </div>
-                    </div>
-                    <p class="leader-bio">Visionary technologist and lead architect of Next Technology. Building minimalist, high-performance digital products that empower brands and delight users.</p>
-                    <div class="leader-skills">
-                        <span class="leader-skill-tag">Full-Stack Development</span>
-                        <span class="leader-skill-tag">Product Strategy</span>
-                        <span class="leader-skill-tag">UI/UX Design</span>
-                        <span class="leader-skill-tag">System Architecture</span>
-                    </div>
-                </div>
-                <div class="leader-card reveal">
-                    <div class="leader-card-bg-glow"></div>
-                    <div class="leader-top">
-                        <div class="leader-avatar" data-initials="CT">
-                            <span class="leader-initials">CT</span>
-                        </div>
-                        <div class="leader-meta">
-                            <div class="leader-badge-pill clevel-badge">C-Level</div>
-                            <h3 class="leader-name">Chief Technology Officer</h3>
-                            <div class="leader-role">Chief Technology Officer</div>
-                        </div>
-                    </div>
-                    <p class="leader-bio">Oversees the technical direction of the company — from infrastructure and cloud systems to AI integrations and security frameworks.</p>
-                    <div class="leader-skills">
-                        <span class="leader-skill-tag">Cloud Infrastructure</span>
-                        <span class="leader-skill-tag">System Architecture</span>
-                        <span class="leader-skill-tag">AI &amp; ML</span>
-                        <span class="leader-skill-tag">Security Engineering</span>
-                    </div>
-                </div>
-                <div class="leader-card reveal">
-                    <div class="leader-card-bg-glow"></div>
-                    <div class="leader-top">
-                        <div class="leader-avatar" data-initials="CO">
-                            <span class="leader-initials">CO</span>
-                        </div>
-                        <div class="leader-meta">
-                            <div class="leader-badge-pill clevel-badge">C-Level</div>
-                            <h3 class="leader-name">Chief Operating Officer</h3>
-                            <div class="leader-role">Chief Operating Officer</div>
-                        </div>
-                    </div>
-                    <p class="leader-bio">Drives operational excellence, client delivery pipelines, and the internal systems that keep Next Technology running at peak performance.</p>
-                    <div class="leader-skills">
-                        <span class="leader-skill-tag">Operations Management</span>
-                        <span class="leader-skill-tag">Client Relations</span>
-                        <span class="leader-skill-tag">Project Delivery</span>
-                        <span class="leader-skill-tag">Business Scaling</span>
-                    </div>
-                </div>
-                <div class="leader-card reveal">
-                    <div class="leader-card-bg-glow"></div>
-                    <div class="leader-top">
-                        <div class="leader-avatar" data-initials="CD">
-                            <span class="leader-initials">CD</span>
-                        </div>
-                        <div class="leader-meta">
-                            <div class="leader-badge-pill clevel-badge">C-Level</div>
-                            <h3 class="leader-name">Chief Design Officer</h3>
-                            <div class="leader-role">Chief Design Officer</div>
-                        </div>
-                    </div>
-                    <p class="leader-bio">Leads creative direction, brand identity, and the end-to-end UI/UX design systems that define the NexTech visual language.</p>
-                    <div class="leader-skills">
-                        <span class="leader-skill-tag">UI/UX Design</span>
-                        <span class="leader-skill-tag">Brand Identity</span>
-                        <span class="leader-skill-tag">Design Systems</span>
-                        <span class="leader-skill-tag">Creative Direction</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- FAQ Section -->
     <section class="faq-section" id="faq">
         <div class="section-container">
@@ -457,6 +361,7 @@
                 <a href="planner.html">Planner</a>
                 <a href="contact.html">Contact</a>
                 <a href="blog.html">Blog</a>
+                <a href="team.html">Team</a>
             </div>
 
             <div class="footer-social">
@@ -580,107 +485,6 @@
 
     <!-- Custom JS -->
     <script src="script.js"></script>
-
-    <!-- Team / Leadership Dynamic Loader -->
-    <script>
-        (async function loadLeadershipSection() {
-            // Wait for Supabase CDN
-            if (typeof window.supabase === 'undefined') {
-                await new Promise(resolve => setTimeout(resolve, 300));
-            }
-
-            const supabaseClient = window.supabaseClient || (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null);
-            if (!supabaseClient) return;
-
-            try {
-                const { data: members, error } = await supabaseClient
-                    .from('team_members')
-                    .select('*')
-                    .order('sort_order', { ascending: true });
-
-                if (error || !members || !members.length) return;
-
-                // Cache
-                localStorage.setItem('nt_team', JSON.stringify(members));
-
-                renderLeadershipCards(members);
-            } catch (e) {
-                console.error('Error loading team members:', e);
-            }
-
-            function getInitials(name) {
-                return (name || 'NT').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-            }
-
-            function renderSocialLinks(m) {
-                const links = [];
-                if (m.linkedin_url) links.push(`<a href="${m.linkedin_url}" target="_blank" rel="noopener" aria-label="LinkedIn" class="leader-social-link">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>`);
-                if (m.github_url) links.push(`<a href="${m.github_url}" target="_blank" rel="noopener" aria-label="GitHub" class="leader-social-link">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-                </a>`);
-                if (m.twitter_url) links.push(`<a href="${m.twitter_url}" target="_blank" rel="noopener" aria-label="X / Twitter" class="leader-social-link">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>`);
-                if (m.email) links.push(`<a href="mailto:${m.email}" aria-label="Email" class="leader-social-link">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                </a>`);
-                return links.length ? `<div class="leader-socials">${links.join('')}</div>` : '';
-            }
-
-            function renderLeadershipCards(members) {
-                const grid = document.getElementById('leadershipGrid');
-                if (!grid) return;
-
-                grid.innerHTML = members.map((m, i) => {
-                    const initials = getInitials(m.name);
-                    const isFounder = m.badge === 'Founder';
-                    const badgeClass = isFounder ? 'founder-badge' : 'clevel-badge';
-                    const cardClass = isFounder ? 'leader-card founder reveal' : 'leader-card reveal';
-                    const skills = Array.isArray(m.skills) ? m.skills : [];
-                    const skillsHtml = skills.map(s => `<span class="leader-skill-tag">${s}</span>`).join('');
-                    const avatarHtml = m.image_url
-                        ? `<img src="${m.image_url}" alt="${m.name}" class="leader-avatar-img">`
-                        : `<span class="leader-initials">${initials}</span>`;
-
-                    return `
-                    <div class="${cardClass}" style="animation-delay:${i * 80}ms">
-                        <div class="leader-card-bg-glow"></div>
-                        <div class="leader-top">
-                            <div class="leader-avatar" data-initials="${initials}">
-                                ${avatarHtml}
-                            </div>
-                            <div class="leader-meta">
-                                <div class="leader-badge-pill ${badgeClass}">${m.badge || 'Team'}</div>
-                                <h3 class="leader-name">${m.name}</h3>
-                                <div class="leader-role">${m.role}</div>
-                            </div>
-                        </div>
-                        ${m.bio ? `<p class="leader-bio">${m.bio}</p>` : ''}
-                        ${skillsHtml ? `<div class="leader-skills">${skillsHtml}</div>` : ''}
-                        ${renderSocialLinks(m)}
-                    </div>`;
-                }).join('');
-
-                // Re-trigger scroll-reveal
-                const revealEls = grid.querySelectorAll('.reveal');
-                if ('IntersectionObserver' in window) {
-                    const obs = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                                obs.unobserve(entry.target);
-                            }
-                        });
-                    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-                    revealEls.forEach(el => obs.observe(el));
-                } else {
-                    revealEls.forEach(el => el.classList.add('visible'));
-                }
-            }
-        })();
-    </script>
 
     <!-- FAQ Dynamic Loader + JSON-LD Schema Updater + Accordion/Filter JS -->
     <script>

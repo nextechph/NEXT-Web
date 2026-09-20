@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en" theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team & Leadership | Next Technology</title>
+    <meta name="description"
+        content="Meet the founders, leadership team, and digital architects behind Next Technology — building modern websites, custom web apps, and high-performance digital solutions in the Philippines.">
+    <link rel="canonical" href="https://nextechnology.com/team.html">
+
+    <!-- Open Graph (Social / GEO signals) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Next Technology">
+    <meta property="og:title" content="Our Team & Leadership | Next Technology">
+    <meta property="og:description"
+        content="Meet the founders, leadership team, and digital architects behind Next Technology — building modern websites, custom web apps, and high-performance digital solutions in the Philippines.">
+    <meta property="og:url" content="https://nextechnology.com/team.html">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Our Team & Leadership | Next Technology">
+    <meta name="twitter:description"
+        content="Meet the founders, leadership team, and digital architects behind Next Technology — building modern websites, custom web apps, and high-performance digital solutions.">
+
+    <!-- Schema.org Structured Data: AboutPage & Leadership Persons -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "Next Technology Leadership & Team",
+      "url": "https://nextechnology.com/team.html",
+      "description": "Meet the founders and leadership team of Next Technology, a premier web design and software engineering studio.",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "Next Technology",
+        "url": "https://nextechnology.com",
+        "founder": {
+          "@type": "Person",
+          "name": "John Enrico Santiago",
+          "jobTitle": "Founder & CEO",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Next Technology"
+          }
+        }
+      }
+    }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;800&family=Barlow+Condensed:wght@300;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase Config -->
+    <script src="supabase-config.js"></script>
+    <!-- Shared Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* ── Team Page Specific Enhancements ── */
+        .team-page-hero {
+            padding: 180px 24px 70px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-page-hero .section-tag {
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+        }
+
+        .team-page-title span {
+            color: var(--text-tertiary);
+        }
+
+        .team-page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            font-weight: 300;
+            max-width: 640px;
+            line-height: 1.7;
+        }
+
+        /* ── Meta / Highlight Stats Bar ── */
+        .team-page-meta {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .meta-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .meta-stat-num {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .meta-stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        .meta-divider {
+            width: 1px;
+            height: 44px;
+            background: var(--border);
+        }
+
+        /* ── Team Filter Tabs ── */
+        .team-filter-bar {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-filter-btn {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .team-filter-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .team-filter-btn.active {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        /* ── Team Section Grid Container ── */
+        .team-content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+        }
+
+        /* ── Enhanced Leader Card ── */
+        .leader-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(8px);
+        }
+
+        .leader-card.founder {
+            border-color: rgba(var(--accent-rgb), 0.35);
+            background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.03) 0%, var(--card-bg) 100%);
+        }
+
+        @media (hover: hover) {
+            .leader-card:hover {
+                border-color: var(--border-hover);
+                transform: translateY(-4px);
+                background-color: var(--card-hover);
+            }
+
+            .leader-card.founder:hover {
+                border-color: rgba(var(--accent-rgb), 0.6);
+                box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        /* ── Principles / Culture Section ── */
+        .principles-section {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+            padding: 100px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .principles-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .principle-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        @media (hover: hover) {
+            .principle-card:hover {
+                border-color: var(--border-hover);
+                transform: translateY(-4px);
+            }
+        }
+
+        .principle-num {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.2em;
+        }
+
+        .principle-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .principle-desc {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        /* ── Team CTA ── */
+        .team-cta-section {
+            padding: 120px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-cta-box {
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-cta-box h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 20px;
+        }
+
+        .team-cta-box p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-weight: 300;
+            max-width: 580px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .team-cta-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link-active {
+            color: var(--text-primary) !important;
+        }
+
+        .nav-link-active::after {
+            width: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .team-page-hero {
+                padding: 140px 20px 50px;
+            }
+
+            .team-page-meta {
+                gap: 24px;
+            }
+
+            .meta-divider {
+                display: none;
+            }
+
+            .team-grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .leader-card {
+                padding: 30px 24px;
+            }
+
+            .team-cta-box {
+                padding: 50px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Mouse Follower Grid & Glow -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow" id="bgGlow"></div>
+
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo-group">
+                <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+            </a>
+
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="portfolio.html" class="nav-link">Portfolio</a>
+                <a href="planner.html" class="nav-link">Planner</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="blog.html" class="nav-link">Blog</a>
+                <a href="team.html" class="nav-link nav-link-active">Team</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle Theme">
+                    <i data-lucide="sun" class="sun-icon"></i>
+                    <i data-lucide="moon" class="moon-icon"></i>
+                </button>
+                <a href="planner.html" class="btn-primary">Start Project</a>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="index.html" class="mobile-nav-link">Home</a>
+            <a href="portfolio.html" class="mobile-nav-link">Portfolio</a>
+            <a href="planner.html" class="mobile-nav-link">Planner</a>
+            <a href="contact.html" class="mobile-nav-link">Contact</a>
+            <a href="blog.html" class="mobile-nav-link">Blog</a>
+            <a href="team.html" class="mobile-nav-link nav-link-active">Team</a>
+            <a href="planner.html" class="btn-primary mobile-btn">Start Project</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Team Hero Section -->
+        <section class="team-page-hero">
+            <div class="section-tag fade-in">
+                <span class="badge-dot" style="background:#00ff66;"></span>
+                <span>Leadership &amp; Architects</span>
+            </div>
+            <h1 class="team-page-title fade-in">
+                The Minds Behind<br><span>What's Next.</span>
+            </h1>
+            <p class="team-page-subtitle fade-in">
+                Meet the founders, executive leaders, and system architects guiding Next Technology. Driven by innovation, precision engineering, and an uncompromising commitment to minimalist digital excellence.
+            </p>
+
+            <div class="team-page-meta fade-in">
+                <div class="meta-stat">
+                    <div class="meta-stat-num">100%</div>
+                    <div class="meta-stat-label">In-House Engineering</div>
+                </div>
+                <div class="meta-divider"></div>
+                <div class="meta-stat">
+                    <div class="meta-stat-num">Founder-Led</div>
+                    <div class="meta-stat-label">Direct Client Access</div>
+                </div>
+                <div class="meta-divider"></div>
+                <div class="meta-stat">
+                    <div class="meta-stat-num">Manila, PH</div>
+                    <div class="meta-stat-label">Global Delivery</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Bar -->
+        <div class="team-filter-bar fade-in" id="teamFilterBar">
+            <button class="team-filter-btn active" data-filter="all" onclick="filterTeam('all', this)">All Members</button>
+            <button class="team-filter-btn" data-filter="Founder" onclick="filterTeam('Founder', this)">Founders</button>
+            <button class="team-filter-btn" data-filter="C-Level" onclick="filterTeam('C-Level', this)">C-Suite / Executives</button>
+            <button class="team-filter-btn" data-filter="Engineering" onclick="filterTeam('Engineering', this)">Engineering &amp; Design</button>
+        </div>
+
+        <!-- Team Grid Section -->
+        <section class="team-content-section">
+            <div class="team-grid-container" id="teamGrid">
+                <!-- Fallback pre-rendered cards: Immediate zero-wait display & crawler friendly -->
+                <!-- Founder Card -->
+                <div class="leader-card founder reveal visible" data-badge="Founder">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="JE">
+                            <span class="leader-initials">JE</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill founder-badge">Founder</div>
+                            <h2 class="leader-name">John Enrico Santiago</h2>
+                            <div class="leader-role">Founder &amp; CEO</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">
+                        Visionary technologist and lead architect of Next Technology. Pioneering minimalist, high-performance digital products that empower enterprise brands, automate business workflows, and delight users globally.
+                    </p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Full-Stack Development</span>
+                        <span class="leader-skill-tag">Product Strategy</span>
+                        <span class="leader-skill-tag">UI/UX Architecture</span>
+                        <span class="leader-skill-tag">System Design</span>
+                    </div>
+                    <div class="leader-socials">
+                        <a href="mailto:contact@nextechnology.com" aria-label="Email John Enrico Santiago" class="leader-social-link">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CTO Card -->
+                <div class="leader-card reveal visible" data-badge="C-Level">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CT">
+                            <span class="leader-initials">CT</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h2 class="leader-name">Chief Technology Officer</h2>
+                            <div class="leader-role">Chief Technology Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">
+                        Oversees technical direction and engineering integrity — from low-latency cloud infrastructure and database modeling to edge-caching architectures and cybersecurity protocols.
+                    </p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Cloud Infrastructure</span>
+                        <span class="leader-skill-tag">System Architecture</span>
+                        <span class="leader-skill-tag">AI &amp; ML Pipelines</span>
+                        <span class="leader-skill-tag">Security Engineering</span>
+                    </div>
+                </div>
+
+                <!-- COO Card -->
+                <div class="leader-card reveal visible" data-badge="C-Level">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CO">
+                            <span class="leader-initials">CO</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h2 class="leader-name">Chief Operating Officer</h2>
+                            <div class="leader-role">Chief Operating Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">
+                        Drives operational excellence, client delivery pipelines, and internal systems that keep Next Technology running at peak performance with zero friction and guaranteed deadlines.
+                    </p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">Operations Management</span>
+                        <span class="leader-skill-tag">Client Relations</span>
+                        <span class="leader-skill-tag">Project Delivery</span>
+                        <span class="leader-skill-tag">Business Scaling</span>
+                    </div>
+                </div>
+
+                <!-- CDO Card -->
+                <div class="leader-card reveal visible" data-badge="C-Level">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="CD">
+                            <span class="leader-initials">CD</span>
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill clevel-badge">C-Level</div>
+                            <h2 class="leader-name">Chief Design Officer</h2>
+                            <div class="leader-role">Chief Design Officer</div>
+                        </div>
+                    </div>
+                    <p class="leader-bio">
+                        Leads creative direction, brand identity, and the end-to-end design systems that define the sleek, dark-mode visual language of Next Technology.
+                    </p>
+                    <div class="leader-skills">
+                        <span class="leader-skill-tag">UI/UX Design</span>
+                        <span class="leader-skill-tag">Brand Identity</span>
+                        <span class="leader-skill-tag">Design Systems</span>
+                        <span class="leader-skill-tag">Motion Graphics</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Principles / Culture -->
+        <section class="principles-section">
+            <div class="principles-container">
+                <div class="section-header">
+                    <span class="section-tag">OUR PHILOSOPHY</span>
+                    <h2 class="section-title">How We Engineer Excellence</h2>
+                    <p class="section-subtitle">We believe great digital products are built by small, highly-skilled teams operating with radical clarity and technical discipline.</p>
+                </div>
+
+                <div class="principles-grid">
+                    <div class="principle-card reveal">
+                        <div class="principle-num">01 / DISCIPLINE</div>
+                        <h3 class="principle-title">Zero Bloatware</h3>
+                        <p class="principle-desc">We eschew heavy, bloated frontend frameworks when pure vanilla engineering yields faster load speeds, higher SEO scores, and cleaner long-term maintenance.</p>
+                    </div>
+
+                    <div class="principle-card reveal">
+                        <div class="principle-num">02 / ACCESS</div>
+                        <h3 class="principle-title">Direct Leadership Access</h3>
+                        <p class="principle-desc">No junior middlemen or disconnected account reps. Clients communicate directly with the engineers and founders actively building their solution.</p>
+                    </div>
+
+                    <div class="principle-card reveal">
+                        <div class="principle-num">03 / PRECISION</div>
+                        <h3 class="principle-title">Obsessive Craftsmanship</h3>
+                        <p class="principle-desc">From micro-animations and typography hierarchy to database queries and edge deployment, every millimeter of our work is built with extreme precision.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Page CTA Section -->
+        <section class="team-cta-section">
+            <div class="team-cta-box reveal">
+                <div class="section-tag" style="margin-bottom:16px;">LET'S COLLABORATE</div>
+                <h2>Ready to Build What's Next?</h2>
+                <p>Have an ambitious project in mind? Our founders and engineering leadership are ready to help you plan, architect, and deploy your vision.</p>
+                <div class="team-cta-actions">
+                    <a href="planner.html" class="btn-primary">Start Project Blueprint</a>
+                    <a href="contact.html" class="btn-secondary">Schedule a Call</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo-group">
+                    <img src="assets/logo.png" alt="Next Technology Logo" class="logo-img">
+                </a>
+                <p class="footer-desc">Architecting minimalist, high-performance websites, custom web apps, and digital foundations for high-tier brands.</p>
+            </div>
+
+            <div class="footer-nav">
+                <h4>Navigation</h4>
+                <a href="index.html">Home</a>
+                <a href="portfolio.html">Portfolio</a>
+                <a href="planner.html">Planner</a>
+                <a href="contact.html">Contact</a>
+                <a href="blog.html">Blog</a>
+                <a href="team.html">Team</a>
+            </div>
+
+            <div class="footer-social">
+                <h4>Connect</h4>
+                <div class="social-links">
+                    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                        </svg>
+                    </a>
+                    <a href="https://x.com" target="_blank" rel="noopener" aria-label="X">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                        </svg>
+                    </a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" />
+                        </svg>
+                    </a>
+                </div>
+                <a href="https://nextechnology.com" target="_blank" class="footer-url">nextechnology.com</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Next Technology. All rights reserved. Designed with precision.</p>
+        </div>
+    </footer>
+
+    <!-- Custom Shared JS -->
+    <script src="script.js"></script>
+
+    <!-- Dynamic Team Loader & Filter Script -->
+    <script>
+        let allTeamMembers = [];
+
+        (async function initTeamPage() {
+            // Check cached data first for instant render
+            try {
+                const cached = localStorage.getItem('nt_team');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        allTeamMembers = parsed;
+                        renderTeamCards(allTeamMembers);
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not parse cached team data:', e);
+            }
+
+            // Wait for Supabase CDN to be ready
+            if (typeof window.supabase === 'undefined') {
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+
+            const supabaseClientInstance = window.supabaseClient || (typeof getSupabaseClient === 'function' ? getSupabaseClient() : null);
+            if (!supabaseClientInstance) return;
+
+            try {
+                const { data: members, error } = await supabaseClientInstance
+                    .from('team_members')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+
+                if (!error && members && members.length > 0) {
+                    allTeamMembers = members;
+                    localStorage.setItem('nt_team', JSON.stringify(members));
+                    renderTeamCards(allTeamMembers);
+                }
+            } catch (e) {
+                console.error('Error fetching team members from Supabase:', e);
+            }
+        })();
+
+        function getInitials(name) {
+            return (name || 'NT').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        }
+
+        function renderSocialLinks(m) {
+            const links = [];
+            if (m.linkedin_url) links.push(`<a href="${m.linkedin_url}" target="_blank" rel="noopener" aria-label="LinkedIn" class="leader-social-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>`);
+            if (m.github_url) links.push(`<a href="${m.github_url}" target="_blank" rel="noopener" aria-label="GitHub" class="leader-social-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>`);
+            if (m.twitter_url) links.push(`<a href="${m.twitter_url}" target="_blank" rel="noopener" aria-label="X / Twitter" class="leader-social-link">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>`);
+            if (m.email) links.push(`<a href="mailto:${m.email}" aria-label="Email" class="leader-social-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </a>`);
+            return links.length ? `<div class="leader-socials">${links.join('')}</div>` : '';
+        }
+
+        function renderTeamCards(members) {
+            const grid = document.getElementById('teamGrid');
+            if (!grid) return;
+
+            grid.innerHTML = members.map((m, i) => {
+                const initials = getInitials(m.name);
+                const isFounder = (m.badge || '').toLowerCase().includes('founder');
+                const badgeClass = isFounder ? 'founder-badge' : 'clevel-badge';
+                const cardClass = isFounder ? 'leader-card founder reveal visible' : 'leader-card reveal visible';
+                const skills = Array.isArray(m.skills) ? m.skills : [];
+                const skillsHtml = skills.map(s => `<span class="leader-skill-tag">${s}</span>`).join('');
+                const avatarHtml = m.image_url
+                    ? `<img src="${m.image_url}" alt="${m.name}" class="leader-avatar-img">`
+                    : `<span class="leader-initials">${initials}</span>`;
+
+                return `
+                <div class="${cardClass}" data-badge="${m.badge || 'Team'}" style="animation-delay:${i * 60}ms">
+                    <div class="leader-card-bg-glow"></div>
+                    <div class="leader-top">
+                        <div class="leader-avatar" data-initials="${initials}">
+                            ${avatarHtml}
+                        </div>
+                        <div class="leader-meta">
+                            <div class="leader-badge-pill ${badgeClass}">${m.badge || 'Team'}</div>
+                            <h2 class="leader-name">${m.name}</h2>
+                            <div class="leader-role">${m.role}</div>
+                        </div>
+                    </div>
+                    ${m.bio ? `<p class="leader-bio">${m.bio}</p>` : ''}
+                    ${skillsHtml ? `<div class="leader-skills">${skillsHtml}</div>` : ''}
+                    ${renderSocialLinks(m)}
+                </div>`;
+            }).join('');
+
+            // Scroll reveal observer
+            const revealEls = grid.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window) {
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            obs.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.08 });
+                revealEls.forEach(el => obs.observe(el));
+            } else {
+                revealEls.forEach(el => el.classList.add('visible'));
+            }
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function filterTeam(filter, btn) {
+            document.querySelectorAll('.team-filter-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            if (!allTeamMembers || !allTeamMembers.length) return;
+
+            if (filter === 'all') {
+                renderTeamCards(allTeamMembers);
+                return;
+            }
+
+            const filtered = allTeamMembers.filter(m => {
+                const badge = (m.badge || '').toLowerCase();
+                const role = (m.role || '').toLowerCase();
+                if (filter === 'Founder') return badge.includes('founder');
+                if (filter === 'C-Level') return badge.includes('c-level') || badge.includes('c-suite') || role.includes('chief');
+                if (filter === 'Engineering') return !badge.includes('founder') || role.includes('architect') || role.includes('engineer') || role.includes('design');
+                return true;
+            });
+
+            renderTeamCards(filtered);
+        }
+    </script>
+</body>
+
+</html>
