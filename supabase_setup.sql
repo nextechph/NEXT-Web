@@ -155,12 +155,12 @@ VALUES (
     'We build cutting-edge digital products and custom software solutions designed to help your business grow and thrive.',
     'NEXT Technology is a leading software development and design agency specializing in modern web solutions, mobile apps, and enterprise software.',
     '© 2026 NEXT Technology. All rights reserved.',
-    'nextechnology.com',
-    'facebook.com/nextechnology',
-    'twitter.com/nextechnology',
-    'instagram.com/nextechnology',
-    'tiktok.com/@nextechnology',
-    'hello@nextechnology.com',
+    'nexttechnologyph.com',
+    'facebook.com/nexttechnologyph',
+    'twitter.com/nexttechnologyph',
+    'instagram.com/nexttechnologyph',
+    'tiktok.com/@nexttechnologyph',
+    'hello@nexttechnologyph.com',
     'Global / Distributed Remote'
 )
 ON CONFLICT (id) DO NOTHING;

@@ -5,4 +5,4 @@ Disallow: /admin.html
 Disallow: /admin-auth
 Disallow: /admin-auth.html
 
-Sitemap: https://nextechnology.com/sitemap.xml
+Sitemap: https://nexttechnologyph.com/sitemap.xml
