@@ -666,10 +666,26 @@
             const grid = document.getElementById('teamGrid');
             if (!grid) return;
 
+            if (!members || members.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 70px 24px; border: 1px dashed var(--border); background: var(--card-bg);">
+                        <div style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-primary); margin-bottom: 8px;">
+                            No Profiles in this Department Yet
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 440px; margin: 0 auto; line-height: 1.6;">
+                            Team members in this category will appear here once configured in the leadership registry.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
             grid.innerHTML = members.map((m, i) => {
                 const initials = getInitials(m.name);
-                const isFounder = (m.badge || '').toLowerCase().includes('founder');
-                const badgeClass = isFounder ? 'founder-badge' : 'clevel-badge';
+                const badgeLower = (m.badge || '').toLowerCase();
+                const isFounder = badgeLower.includes('founder');
+                const isCLevel = badgeLower.includes('c-level') || badgeLower.includes('c-suite') || badgeLower.includes('director') || badgeLower.includes('executive');
+                const badgeClass = isFounder ? 'founder-badge' : (isCLevel ? 'clevel-badge' : 'team-badge');
                 const cardClass = isFounder ? 'leader-card founder reveal visible' : 'leader-card reveal visible';
                 const skills = Array.isArray(m.skills) ? m.skills : [];
                 const skillsHtml = skills.map(s => `<span class="leader-skill-tag">${s}</span>`).join('');
@@ -736,11 +752,30 @@
             }
 
             const filtered = allTeamMembers.filter(m => {
-                const badge = (m.badge || '').toLowerCase();
-                const role = (m.role || '').toLowerCase();
-                if (filter === 'Founder') return badge.includes('founder');
-                if (filter === 'C-Level') return badge.includes('c-level') || badge.includes('c-suite') || role.includes('chief');
-                if (filter === 'Engineering') return !badge.includes('founder') || role.includes('architect') || role.includes('engineer') || role.includes('design');
+                const badge = (m.badge || '').trim().toLowerCase();
+                const role = (m.role || '').trim().toLowerCase();
+
+                const isFounder = badge.includes('founder') || role.includes('founder');
+                const isCLevel = badge.includes('c-level') || badge.includes('c-suite') || badge.includes('executive') || badge.includes('director') ||
+                                 role.includes('chief') || role.includes('ceo') || role.includes('cto') || role.includes('cmo') || role.includes('coo') || role.includes('cfo') || role.includes('cpo') || role.includes('cio') || role.includes('president') || role.includes('vp');
+
+                if (filter === 'Founder') {
+                    return isFounder;
+                }
+
+                if (filter === 'C-Level') {
+                    return isCLevel;
+                }
+
+                if (filter === 'Engineering') {
+                    // C-Level executives and Founders must never appear under Engineering & Design
+                    if (isFounder || isCLevel) return false;
+
+                    // Match engineers, designers, developers, architects, and technical contributors
+                    return badge.includes('engineering') || badge.includes('design') || badge.includes('developer') || badge.includes('tech') || badge.includes('team') ||
+                           role.includes('architect') || role.includes('engineer') || role.includes('design') || role.includes('developer') || role.includes('ui') || role.includes('ux') || role.includes('frontend') || role.includes('backend') || role.includes('full-stack') || role.includes('dev');
+                }
+
                 return true;
             });
 

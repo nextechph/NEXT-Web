@@ -1753,7 +1753,8 @@ body.page-leaving {
     background: rgba(var(--accent-rgb), 0.05);
 }
 
-.leader-badge-pill.clevel-badge {
+.leader-badge-pill.clevel-badge,
+.leader-badge-pill.team-badge {
     color: var(--text-secondary);
     border-color: var(--border);
     background: transparent;
