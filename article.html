@@ -127,6 +127,15 @@
             font-size: 0.65rem;
             font-weight: 700;
             color: var(--text-tertiary);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .author-info {
@@ -656,7 +665,7 @@
                 <div class="article-meta-info">
                     <div class="post-meta">
                         <div class="post-author">
-                            <div class="author-avatar">NT</div>
+                            <div class="author-avatar" id="postAuthorAvatar">NT</div>
                             <div class="author-info">
                                 <span class="author-name" id="postAuthor">NEXT Technology Team</span>
                                 <span class="post-date" id="postDate">June 10, 2026</span>
@@ -874,12 +883,28 @@
                 // Title tag update
                 document.title = `${post.title} | NEXT Technology`;
 
+                const authorName = post.author || 'NEXT Technology Team';
                 document.getElementById('postTitle').textContent = post.title;
                 document.getElementById('postExcerpt').textContent = post.excerpt || '';
                 document.getElementById('postCategory').textContent = post.category || 'Engineering';
-                document.getElementById('postAuthor').textContent = post.author || 'NEXT Technology Team';
+                document.getElementById('postAuthor').textContent = authorName;
                 document.getElementById('postDate').textContent = post.post_date || '';
                 document.getElementById('postReadTime').innerHTML = `<i data-lucide="clock"></i> ${post.read_time || '5 min read'}`;
+
+                // Author Avatar
+                const avatarEl = document.getElementById('postAuthorAvatar');
+                if (avatarEl) {
+                    if (post.author_image_url) {
+                        avatarEl.innerHTML = `<img src="${post.author_image_url}" alt="${authorName}">`;
+                    } else {
+                        const cleanName = authorName.split('|')[0].trim();
+                        const parts = cleanName.split(/\s+/).filter(Boolean);
+                        const initials = parts.length > 1
+                            ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+                            : (parts[0] ? parts[0].substring(0, 2).toUpperCase() : 'NT');
+                        avatarEl.textContent = initials;
+                    }
+                }
 
                 // Cover Image
                 const coverWrapper = document.getElementById('postCover');
@@ -897,7 +922,7 @@
                 // Load More Articles
                 const { data: allPosts, error: postsError } = await supabase
                     .from('blog_posts')
-                    .select('id, title, category, excerpt, post_date, read_time, image_url, status')
+                    .select('id, title, category, excerpt, post_date, read_time, image_url, status, author, author_image_url')
                     .eq('status', 'published')
                     .neq('id', id);
 

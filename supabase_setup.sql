@@ -79,12 +79,17 @@ CREATE TABLE IF NOT EXISTS public.blog_posts (
     content text,
     category text,
     author text,
+    author_image_url text,
     post_date text, -- using post_date as "date" can conflict or be confusing
     read_time text,
     image_url text,
     status text DEFAULT 'published', -- 'published' or 'draft'
     created_at timestamptz DEFAULT now()
 );
+
+-- Migration: add author_image_url to existing blog_posts tables
+ALTER TABLE public.blog_posts
+    ADD COLUMN IF NOT EXISTS author_image_url text;
 
 -- Planner Config Table (Single Row)
 CREATE TABLE IF NOT EXISTS public.planner_config (

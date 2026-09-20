@@ -1444,16 +1444,36 @@
                 <div class="form-section">
                     <div class="form-section-title">Author & Status</div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Author Name</label>
-                            <input type="text" id="blogAuthor" placeholder="NEXT Technology Team">
+                        <div class="form-group" style="flex: 2;">
+                            <label>Author Name & Title</label>
+                            <input type="text" id="blogAuthor" placeholder="e.g. Uno | Founder, NEXT Technology" oninput="handleBlogAuthorNameInput()">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="flex: 1;">
                             <label>Status</label>
                             <select id="blogStatus">
                                 <option value="published">Published</option>
                                 <option value="draft">Draft</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 14px;">
+                        <label>Author Picture (Avatar)</label>
+                        <div style="display: flex; align-items: center; gap: 14px; margin-top: 6px; flex-wrap: wrap;">
+                            <div id="blogAuthorPreviewWrap" style="width: 52px; height: 52px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border); overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <span id="blogAuthorEmptyPreview" style="font-size: 0.75rem; color: var(--text3); font-weight: 700; letter-spacing: 0.05em;">NT</span>
+                            </div>
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; flex: 1;">
+                                <label class="btn-secondary" style="padding: 7px 14px; font-size: 0.75rem; cursor: pointer; margin: 0; display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                    <span>Upload Picture</span>
+                                    <input type="file" accept="image/*" id="blogAuthorFileInput" style="display: none;" onchange="handleBlogAuthorPhotoUpload(event)">
+                                </label>
+                                <button type="button" class="btn-secondary" onclick="clearBlogAuthorPhoto()" style="padding: 7px 14px; font-size: 0.75rem;">Remove</button>
+                                <input type="text" id="blogAuthorImg" placeholder="Or paste image URL (https://...)" style="flex: 1; min-width: 220px; font-size: 0.75rem; padding: 7px 10px;" oninput="updateBlogAuthorPhotoPreview(this.value)">
+                            </div>
+                        </div>
+                        <div style="font-size: 0.7rem; color: var(--text3); margin-top: 6px;">
+                            Square or portrait photo. Automatically resized and displayed as the circular avatar next to your author name.
                         </div>
                     </div>
                 </div>
@@ -1966,6 +1986,7 @@
                 content: document.getElementById('blogContent').value.trim(),
                 read_time: document.getElementById('blogReadTime').value.trim() || '5 min',
                 author: document.getElementById('blogAuthor').value.trim() || 'NEXT Technology Team',
+                author_image_url: document.getElementById('blogAuthorImg').value.trim() || null,
                 status,
                 image_url: imageUrl,
                 post_date: editId ? undefined : new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -2003,11 +2024,98 @@
             }
         }
 
+        function getAuthorInitials(name) {
+            if (!name) return 'NT';
+            const cleanName = name.split('|')[0].trim();
+            const parts = cleanName.split(/\s+/).filter(Boolean);
+            if (parts.length > 1) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return parts[0] ? parts[0].substring(0, 2).toUpperCase() : 'NT';
+        }
+
+        function updateBlogAuthorPhotoPreview(url) {
+            const wrap = document.getElementById('blogAuthorPreviewWrap');
+            if (!wrap) return;
+            const cleanUrl = (url || '').trim();
+            if (cleanUrl) {
+                wrap.innerHTML = `<img src="${cleanUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.outerHTML='<span style=\\'font-size:0.65rem;color:#ff4444;text-align:center;padding:2px;\\'>Err</span>'">`;
+            } else {
+                const authorVal = document.getElementById('blogAuthor')?.value || '';
+                wrap.innerHTML = `<span id="blogAuthorEmptyPreview" style="font-size:0.75rem;color:var(--text3);font-weight:700;letter-spacing:0.05em;">${getAuthorInitials(authorVal)}</span>`;
+            }
+        }
+
+        function handleBlogAuthorNameInput() {
+            const currentImg = document.getElementById('blogAuthorImg')?.value || '';
+            if (!currentImg.trim()) {
+                updateBlogAuthorPhotoPreview('');
+            }
+        }
+
+        function clearBlogAuthorPhoto() {
+            const input = document.getElementById('blogAuthorImg');
+            if (input) input.value = '';
+            const fileInput = document.getElementById('blogAuthorFileInput');
+            if (fileInput) fileInput.value = '';
+            updateBlogAuthorPhotoPreview('');
+            showToast('Author picture removed.');
+        }
+
+        function handleBlogAuthorPhotoUpload(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            showToast('Processing author photo...');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 400;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height = Math.round((height * MAX_SIZE) / width);
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width = Math.round((width * MAX_SIZE) / height);
+                            height = MAX_SIZE;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    const input = document.getElementById('blogAuthorImg');
+                    if (input) input.value = compressedDataUrl;
+
+                    updateBlogAuthorPhotoPreview(compressedDataUrl);
+                    showToast('Author picture attached!');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
         function resetBlogForm() {
             ['blogTitle', 'blogExcerpt', 'blogContent', 'blogReadTime', 'blogAuthor'].forEach(id => document.getElementById(id).value = '');
             document.getElementById('blogCategory').value = 'Development';
             document.getElementById('blogStatus').value = 'published';
             document.getElementById('blogImgData').value = '';
+            document.getElementById('blogAuthorImg').value = '';
+            const fileInput = document.getElementById('blogAuthorFileInput');
+            if (fileInput) fileInput.value = '';
+            updateBlogAuthorPhotoPreview('');
             document.getElementById('editBlogId').value = '';
             selectedBlogImgFile = null;
             const img = document.getElementById('blogImgPreview');
@@ -2042,6 +2150,8 @@
             document.getElementById('blogContent').value = post.content || '';
             document.getElementById('blogReadTime').value = post.read_time || '';
             document.getElementById('blogAuthor').value = post.author || '';
+            document.getElementById('blogAuthorImg').value = post.author_image_url || '';
+            updateBlogAuthorPhotoPreview(post.author_image_url || '');
             document.getElementById('blogStatus').value = post.status;
             document.getElementById('blogImgData').value = post.image_url || '';
 
