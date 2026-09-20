@@ -810,36 +810,190 @@
             margin-top: 2px;
         }
 
-        /* ── TOAST ── */
+        /* ── TOAST NOTIFICATION ── */
         .toast {
             position: fixed;
-            bottom: 32px;
-            right: 32px;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            padding: 14px 20px;
-            font-size: 0.82rem;
-            color: var(--text);
+            bottom: 28px;
+            right: 28px;
+            background: rgba(18, 18, 22, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 12px 18px;
+            font-size: 0.84rem;
+            color: #f4f4f5;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transform: translateY(80px);
+            gap: 12px;
+            transform: translateY(30px) scale(0.96);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: 999;
+            pointer-events: none;
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 10000;
+            max-width: 400px;
         }
 
         .toast.show {
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             opacity: 1;
+            pointer-events: auto;
         }
 
-        .toast-dot {
-            width: 6px;
-            height: 6px;
+        .toast-icon-wrap {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            background: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .toast.is-error .toast-icon-wrap {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .toast.is-info .toast-icon-wrap {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .toast-text {
+            font-weight: 500;
+            line-height: 1.4;
+            color: #ffffff;
+            letter-spacing: 0.01em;
+        }
+
+        /* ── CUSTOM CONFIRM MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 99999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-modal-card {
+            background: #0d0d10;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 28px 56px -12px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            max-width: 440px;
+            width: 100%;
+            padding: 28px 24px 22px;
+            transform: scale(0.94) translateY(8px);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-overlay.active .confirm-modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .confirm-modal-icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .confirm-modal-icon-wrap.danger {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.28);
+            color: #ef4444;
+        }
+
+        .confirm-modal-icon-wrap.info {
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            color: #60a5fa;
+        }
+
+        .confirm-modal-title {
+            font-family: var(--font-display, 'Syne', sans-serif);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+
+        .confirm-modal-message {
+            font-size: 0.85rem;
+            color: #a1a1aa;
+            line-height: 1.55;
+            margin-bottom: 24px;
+        }
+
+        .confirm-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .confirm-modal-actions button {
+            padding: 9px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .confirm-modal-cancel {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #d4d4d8;
+        }
+
+        .confirm-modal-cancel:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+        }
+
+        .confirm-modal-confirm-btn.danger {
+            background: #dc2626;
+            border: 1px solid #ef4444;
+            color: #ffffff;
+        }
+
+        .confirm-modal-confirm-btn.danger:hover {
+            background: #ef4444;
+            box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+        }
+
+        .confirm-modal-confirm-btn.primary {
+            background: #ffffff;
+            border: 1px solid #ffffff;
+            color: #000000;
+        }
+
+        .confirm-modal-confirm-btn.primary:hover {
+            background: #e4e4e7;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
         }
 
         /* ── EMPTY STATE ── */
@@ -1817,10 +1971,33 @@
         </main>
     </div>
 
+    <!-- Custom Confirm Modal -->
+    <div class="modal-overlay" id="confirmModalOverlay" onclick="handleConfirmModalBackdrop(event)">
+        <div class="confirm-modal-card" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+            <div class="confirm-modal-icon-wrap danger" id="confirmModalIconWrap">
+                <svg id="confirmModalIconSvg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <div class="confirm-modal-title" id="confirmModalTitle">Confirm Action</div>
+            <div class="confirm-modal-message" id="confirmModalMessage">Are you sure you want to proceed?</div>
+            <div class="confirm-modal-actions">
+                <button type="button" class="confirm-modal-cancel" id="confirmModalCancelBtn">Cancel</button>
+                <button type="button" class="confirm-modal-confirm-btn danger" id="confirmModalActionBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">
-        <div class="toast-dot"></div>
-        <span id="toastMsg">Saving...</span>
+        <div class="toast-icon-wrap" id="toastIconWrap">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        <span class="toast-text" id="toastMsg">Notification</span>
     </div>
 
     <script>
@@ -2171,7 +2348,13 @@
         }
 
         async function deletePost(id) {
-            if (!confirm('Delete this post?')) return;
+            const ok = await showConfirmModal({
+                title: 'Delete Blog Post',
+                message: 'Are you sure you want to permanently delete this blog post? This action cannot be undone.',
+                confirmText: 'Delete Post',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -2359,7 +2542,13 @@
         }
 
         async function deleteProject(id) {
-            if (!confirm('Delete this project?')) return;
+            const ok = await showConfirmModal({
+                title: 'Delete Project',
+                message: 'Are you sure you want to delete this portfolio project from your website?',
+                confirmText: 'Delete Project',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -2464,12 +2653,111 @@
             refreshDashboard();
         }
 
-        // ── TOAST ──
-        function showToast(msg) {
+        // ── CUSTOM ASYNC CONFIRM MODAL ──
+        let _confirmResolver = null;
+
+        function showConfirmModal({
+            title = 'Confirm Action',
+            message = 'Are you sure you want to proceed?',
+            confirmText = 'Confirm',
+            cancelText = 'Cancel',
+            danger = true
+        } = {}) {
+            return new Promise((resolve) => {
+                _confirmResolver = resolve;
+                const overlay = document.getElementById('confirmModalOverlay');
+                const titleEl = document.getElementById('confirmModalTitle');
+                const msgEl = document.getElementById('confirmModalMessage');
+                const actionBtn = document.getElementById('confirmModalActionBtn');
+                const cancelBtn = document.getElementById('confirmModalCancelBtn');
+                const iconWrap = document.getElementById('confirmModalIconWrap');
+
+                titleEl.textContent = title;
+                msgEl.textContent = message;
+                actionBtn.textContent = confirmText;
+                cancelBtn.textContent = cancelText;
+
+                if (danger) {
+                    iconWrap.className = 'confirm-modal-icon-wrap danger';
+                    actionBtn.className = 'confirm-modal-confirm-btn danger';
+                } else {
+                    iconWrap.className = 'confirm-modal-icon-wrap info';
+                    actionBtn.className = 'confirm-modal-confirm-btn primary';
+                }
+
+                overlay.classList.add('active');
+
+                const onConfirm = () => { cleanup(); resolve(true); };
+                const onCancel = () => { cleanup(); resolve(false); };
+                const onKeyDown = (e) => {
+                    if (e.key === 'Escape') onCancel();
+                    if (e.key === 'Enter') onConfirm();
+                };
+
+                function cleanup() {
+                    overlay.classList.remove('active');
+                    actionBtn.removeEventListener('click', onConfirm);
+                    cancelBtn.removeEventListener('click', onCancel);
+                    document.removeEventListener('keydown', onKeyDown);
+                    _confirmResolver = null;
+                }
+
+                actionBtn.addEventListener('click', onConfirm, { once: true });
+                cancelBtn.addEventListener('click', onCancel, { once: true });
+                document.addEventListener('keydown', onKeyDown);
+            });
+        }
+
+        function handleConfirmModalBackdrop(e) {
+            if (e.target.id === 'confirmModalOverlay' && _confirmResolver) {
+                const cancelBtn = document.getElementById('confirmModalCancelBtn');
+                if (cancelBtn) cancelBtn.click();
+            }
+        }
+
+        // ── SLEEK TOAST NOTIFICATION ──
+        let _toastTimeout = null;
+        function showToast(msg, type = 'default') {
             const t = document.getElementById('toast');
-            document.getElementById('toastMsg').textContent = msg;
+            const msgEl = document.getElementById('toastMsg');
+            const iconWrap = document.getElementById('toastIconWrap');
+            if (!t || !msgEl) return;
+
+            msgEl.textContent = msg;
+
+            const isError = type === 'error' || /error|failed|invalid|cannot/i.test(msg);
+            const isInfo = type === 'info' || /saving|processing|loading/i.test(msg);
+
+            t.classList.remove('is-error', 'is-info');
+
+            if (isError) {
+                t.classList.add('is-error');
+                iconWrap.innerHTML = `
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>`;
+            } else if (isInfo) {
+                t.classList.add('is-info');
+                iconWrap.innerHTML = `
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>`;
+            } else {
+                iconWrap.innerHTML = `
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>`;
+            }
+
+            if (_toastTimeout) clearTimeout(_toastTimeout);
             t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
+            _toastTimeout = setTimeout(() => {
+                t.classList.remove('show');
+            }, 3200);
         }
 
         // ══════════════════════════════════════════
@@ -2722,7 +3010,13 @@
         }
 
         async function resetPlannerConfig() {
-            if (!confirm('Reset planner to defaults? This will overwrite the database.')) return;
+            const ok = await showConfirmModal({
+                title: 'Reset Planner Config',
+                message: 'Reset project planner to default settings? This will overwrite existing database pricing tiers.',
+                confirmText: 'Reset Planner',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -2868,8 +3162,14 @@
             renderServicesEditorWithData(draft);
         }
 
-        function deleteServiceRow(i) {
-            if (!confirm('Are you sure you want to delete this service?')) return;
+        async function deleteServiceRow(i) {
+            const ok = await showConfirmModal({
+                title: 'Remove Service',
+                message: 'Are you sure you want to remove this service card?',
+                confirmText: 'Remove Service',
+                danger: true
+            });
+            if (!ok) return;
             const draft = getCurrentServicesDraft();
             draft.splice(i, 1);
             draft.forEach((s, idx) => {
@@ -2938,7 +3238,13 @@
         }
 
         async function resetServicesConfig() {
-            if (!confirm('Reset services to defaults? This will overwrite the database.')) return;
+            const ok = await showConfirmModal({
+                title: 'Reset Services',
+                message: 'Reset services to defaults? This will overwrite the services configured in the database.',
+                confirmText: 'Reset Services',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -3071,7 +3377,13 @@
         }
 
         async function resetSiteSettings() {
-            if (!confirm('Reset all site settings to defaults? This will overwrite the database.')) return;
+            const ok = await showConfirmModal({
+                title: 'Reset Site Settings',
+                message: 'Reset all site settings (hero copy, social links, footer) to defaults? This will overwrite the live database settings.',
+                confirmText: 'Reset Settings',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -3356,8 +3668,14 @@
             renderTeamEditorWithData(draft);
         }
 
-        function deleteTeamMemberRow(i) {
-            if (!confirm('Remove this team member?')) return;
+        async function deleteTeamMemberRow(i) {
+            const ok = await showConfirmModal({
+                title: 'Remove Team Member',
+                message: 'Are you sure you want to remove this team member?',
+                confirmText: 'Remove Member',
+                danger: true
+            });
+            if (!ok) return;
             const draft = getTeamDraft();
             draft.splice(i, 1);
             _teamMemberIds.splice(i, 1);
@@ -3419,7 +3737,13 @@
         }
 
         async function resetTeamConfig() {
-            if (!confirm('Reset team to defaults? This will overwrite the database.')) return;
+            const ok = await showConfirmModal({
+                title: 'Reset Team Members',
+                message: 'Reset team to defaults? This will overwrite all team members in the database.',
+                confirmText: 'Reset Team',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
@@ -3525,8 +3849,14 @@
             if (lastCard) lastCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        function deleteFaqRow(i) {
-            if (!confirm('Remove this FAQ?')) return;
+        async function deleteFaqRow(i) {
+            const ok = await showConfirmModal({
+                title: 'Remove FAQ',
+                message: 'Are you sure you want to remove this question?',
+                confirmText: 'Remove FAQ',
+                danger: true
+            });
+            if (!ok) return;
             const draft = getFaqDraft();
             draft.splice(i, 1);
             renderFaqEditorWithData(draft);
@@ -3574,7 +3904,13 @@
         }
 
         async function resetFaqConfig() {
-            if (!confirm('Reset FAQs to defaults? This will overwrite the database.')) return;
+            const ok = await showConfirmModal({
+                title: 'Reset FAQs',
+                message: 'Reset all FAQs to defaults? This will overwrite existing FAQs in the database.',
+                confirmText: 'Reset FAQs',
+                danger: true
+            });
+            if (!ok) return;
             const supabase = getSupabaseClient();
             if (!supabase) return;
 
