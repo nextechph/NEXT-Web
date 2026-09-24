@@ -3500,7 +3500,11 @@
             <div class="form-section team-editor-card" style="margin-bottom:16px;">
                 <div class="form-section-title" style="display:flex;justify-content:space-between;align-items:center;">
                     <span>${m.name || 'New Member'}</span>
-                    <button class="btn-danger" onclick="deleteTeamMemberRow(${i})" style="padding:6px 12px;font-size:0.7rem;">Remove</button>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <button class="btn-secondary" onclick="moveTeamMember(${i}, -1)" ${i === 0 ? 'disabled' : ''} style="padding:6px 10px;font-size:0.7rem;" title="Move Up">↑</button>
+                        <button class="btn-secondary" onclick="moveTeamMember(${i}, 1)" ${i === members.length - 1 ? 'disabled' : ''} style="padding:6px 10px;font-size:0.7rem;" title="Move Down">↓</button>
+                        <button class="btn-danger" onclick="deleteTeamMemberRow(${i})" style="padding:6px 12px;font-size:0.7rem;">Remove</button>
+                    </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
@@ -3879,6 +3883,15 @@
         function addTeamMemberRow() {
             const draft = getTeamDraft();
             draft.push({ name: '', role: '', badge: 'Team', bio: '', image_url: '', skills: [], linkedin_url: '', github_url: '', twitter_url: '', email: '' });
+            renderTeamEditorWithData(draft);
+        }
+
+        function moveTeamMember(index, direction) {
+            const draft = getTeamDraft();
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= draft.length) return;
+            [draft[index], draft[newIndex]] = [draft[newIndex], draft[index]];
+            [_teamMemberIds[index], _teamMemberIds[newIndex]] = [_teamMemberIds[newIndex], _teamMemberIds[index]];
             renderTeamEditorWithData(draft);
         }
 
