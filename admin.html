@@ -1449,6 +1449,8 @@
                     FAQ Editor
                     <span class="nav-badge" id="faqBadge">0</span>
                 </div>
+                <div class="nav-item" onclick="switchView('templates-editor')">Website Templates</div>
+                <div class="nav-item" onclick="switchView('second-boot-editor')">Second Boot by NEXT</div>
                 <div class="nav-item" onclick="switchView('site-settings')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3" />
@@ -1462,6 +1464,15 @@
 
         <main class="admin-main">
 
+<div class="admin-view" id="view-templates-editor">
+ <div class="view-header"><div><div class="view-title">Website Templates</div><div class="view-sub">Edit homepage content. Save to publish changes to all visitors.</div></div></div>
+ <p id="templates-editor-status" role="status" style="margin-bottom:16px;"></p>
+ <form id="templates-content-form"><div id="templates-editor-fields"></div>
+ <div class="btn-row"><button type="submit" class="btn-primary">Save Website Templates</button><button type="button" class="btn-secondary" onclick="SectionEditor.add('templates')">+ Add Template</button></div></form></div><div class="admin-view" id="view-second-boot-editor">
+ <div class="view-header"><div><div class="view-title">Second Boot by NEXT</div><div class="view-sub">Edit homepage content. Save to publish changes to all visitors.</div></div></div>
+ <p id="second-boot-editor-status" role="status" style="margin-bottom:16px;"></p>
+ <form id="second-boot-content-form"><div id="second-boot-editor-fields"></div>
+ <div class="btn-row"><button type="submit" class="btn-primary">Save Second Boot by NEXT</button><button type="button" class="btn-secondary" onclick="SectionEditor.add('second-boot')">+ Add Service</button></div></form></div>
             <!-- DASHBOARD -->
             <div class="admin-view active" id="view-dashboard">
                 <div class="view-header">
@@ -2068,6 +2079,8 @@
             if (view === 'services-editor') loadServicesEditor();
             if (view === 'team-editor') loadTeamEditor();
             if (view === 'faq-editor') loadFaqEditor();
+            if (view === 'templates-editor') SectionEditor.load('templates');
+            if (view === 'second-boot-editor') SectionEditor.load('second-boot');
             if (view === 'site-settings') loadSiteSettings();
             if (view === 'blog-new' && !isEdit) {
                 document.getElementById('blogFormTitle').textContent = 'New Blog Post';
@@ -4169,6 +4182,8 @@
             }
         }
     </script>
+    <script src="sections.js"></script>
+    <script src="sections-admin.js"></script>
 </body>
 
 </html>

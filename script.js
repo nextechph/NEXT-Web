@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     const formStatus = document.getElementById('formStatus');
     
-    if (contactForm && formStatus) {
+    if (contactForm && formStatus && !contactForm.hasAttribute('data-persist-inquiry')) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
             

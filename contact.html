@@ -268,7 +268,7 @@
                     </div>
 
                     <!-- Contact Form -->
-                    <form class="contact-form" id="contactForm">
+                    <form class="contact-form" id="contactForm" data-persist-inquiry>
                         <!-- Blueprint Summary Card (Dynamic) -->
                         <div id="blueprintSummary" class="blueprint-summary-card" style="display: none;">
                             <h3><i data-lucide="sliders"></i> Your Configured Project Blueprint</h3>
@@ -431,6 +431,15 @@
             // Populate contact method dropdown before autofill runs
             await loadContactMethods();
 
+            const inquiryParams = new URLSearchParams(window.location.search);
+            const chosenTemplate = inquiryParams.get('template');
+            const hardwareInquiry = inquiryParams.get('division') === 'second-boot';
+            if (chosenTemplate || hardwareInquiry) {
+                document.getElementById('projectDesc').value = chosenTemplate
+                    ? `I'd like to customize the "${chosenTemplate}" website template.\n\nMy business / brand:\nChanges and features I need:\nBudget and timeline:`
+                    : `I'm interested in Second Boot by NEXT.\n\nService: ${inquiryParams.get('service') || 'PC build / upgrade / servicing'}\nCurrent PC specs (if any):\nIntended use:\nBudget:`;
+            }
+
             // Pre-fill from Planner blueprint via sessionStorage
             const rawDataStr = sessionStorage.getItem('next_blueprint_raw') || sessionStorage.getItem('nextech_blueprint_raw');
             const blueprintData = sessionStorage.getItem('next_blueprint') || sessionStorage.getItem('nextech_blueprint');
@@ -588,7 +597,7 @@
                         email: email,
                         phone: phone,
                         contact_method: method,
-                        subject: 'Project Planner Submission',
+                        subject: chosenTemplate ? 'Website Template Customization: ' + chosenTemplate : hardwareInquiry ? 'Second Boot Inquiry' : 'Project Planner Submission',
                         message: messageContent,
                         blueprint: blueprintContent,
                         description: desc,
@@ -597,7 +606,7 @@
                         budget_range:    raw ? raw.budget   || null : null,
                         timeline:        raw ? raw.timeline || null : null,
                         project_name:    raw ? raw.project_name || null : null,
-                        inquiry_type:    raw ? (raw.type === 'student' ? 'Student Package' : 'Professional Project') : 'Direct Inquiry'
+                        inquiry_type:    raw ? (raw.type === 'student' ? 'Student Package' : 'Professional Project') : chosenTemplate ? 'Website Template' : hardwareInquiry ? 'Second Boot' : 'Direct Inquiry'
                     };
 
                     const { error } = await supabase
