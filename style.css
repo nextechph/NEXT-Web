@@ -2163,9 +2163,43 @@ body.page-leaving {
 @media(max-width:1000px) { .catalog-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:640px) { .catalog-section { padding:64px 0; } .catalog-grid { grid-template-columns:1fr; } .catalog-footer { flex-direction:column; align-items:flex-start; } .catalog-card-body { padding:24px; } .preview-toolbar { align-items:flex-start; flex-direction:column; } }
 
-.catalog-header .nav-links { gap:20px; }
-.catalog-header .nav-link { white-space:nowrap; }
-@media (max-width:1200px) {
-    .catalog-header .nav-links, .catalog-header .nav-actions .btn-primary { display:none; }
-    .catalog-header .mobile-menu-toggle { display:block; }
+/* Keep all three header groups in normal flow so links cannot overlap actions. */
+.catalog-header .nav-container {
+    max-width: 1440px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: clamp(24px, 2.5vw, 40px);
+}
+.catalog-header .logo-group { min-width: 0; }
+.catalog-header .logo-img { width: 140px; height: 64px; }
+.catalog-header .nav-links {
+    position: static;
+    transform: none;
+    justify-content: center;
+    gap: clamp(14px, 1.4vw, 22px);
+    min-width: 0;
+}
+.catalog-header .nav-link {
+    white-space: nowrap;
+    font-size: .75rem;
+    letter-spacing: .08em;
+}
+.catalog-header .nav-actions {
+    position: static;
+    gap: 16px;
+    flex-shrink: 0;
+}
+.catalog-header .nav-actions .btn-primary { white-space: nowrap; }
+.catalog-header a:focus-visible,
+.catalog-header button:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+@media (max-width: 1279px) {
+    .catalog-header .nav-container { grid-template-columns: minmax(0, 1fr) auto; gap: 20px; }
+    .catalog-header .nav-links { display: none; }
+    .catalog-header .mobile-menu-toggle { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+}
+@media (max-width: 768px) {
+    .catalog-header .nav-container { padding-inline: 16px; }
+    .catalog-header .nav-actions { gap: 10px; }
+    .catalog-header .nav-actions .btn-primary { display: none; }
+    .catalog-header .logo-img { width: 120px; }
 }
