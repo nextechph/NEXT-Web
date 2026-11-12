@@ -67,13 +67,16 @@
         });
     }
     window.HomeSections = { defaults, escape, imageURL, read };
-    if (document.getElementById('template-grid')) {
+    if (document.getElementById('template-grid') || document.getElementById('boot-grid')) {
         Object.keys(defaults).forEach(async key => {
+            if (!document.getElementById(key === 'templates' ? 'template-grid' : 'boot-grid')) return;
             render(key, defaults[key]);
             try { render(key, await read(key)); } catch (error) { console.warn('Using default section content:', error.message); }
         });
         const dialog = document.getElementById('template-preview');
-        document.getElementById('close-template-preview').addEventListener('click', () => dialog.close());
-        dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+        if (dialog) {
+            document.getElementById('close-template-preview').addEventListener('click', () => dialog.close());
+            dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+        }
     }
 })();

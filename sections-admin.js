@@ -64,7 +64,7 @@
                 const { error } = await client.from('homepage_sections').upsert({id:key, content:data, updated_at:new Date().toISOString()});
                 if (error) throw error;
                 drafts[key] = data;
-                status(key, 'Saved. Changes are available on the homepage.');
+                status(key, 'Saved. Changes are available on the homepage and dedicated page.');
             } catch (error) { status(key, 'Save failed. Your edits are still here. ' + error.message); }
             finally { button.disabled = false; }
         });

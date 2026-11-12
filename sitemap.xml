@@ -36,4 +36,16 @@
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
+    <url>
+        <loc>https://nexttechnologyph.com/templates</loc>
+        <lastmod>2026-11-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://nexttechnologyph.com/second-boot</loc>
+        <lastmod>2026-11-12</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
 </urlset>
