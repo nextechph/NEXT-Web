@@ -1,0 +1,2 @@
+import JsonLD from './JsonLD';
+export default function AnswerSection({items,title}){return <section className="answer-section section-container" aria-label={title}><span className="section-tag">GOOD TO KNOW</span><h2>{title}</h2><div>{items.map(item=><details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div><JsonLD data={{'@context':'https://schema.org','@type':'FAQPage',mainEntity:items.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}}/></section>;}

@@ -1,0 +1,9 @@
+'use client';
+import { useState } from 'react';
+import { Image, ArrowUpRight } from 'lucide-react';
+import { safeURL } from '../lib/urls';
+export default function PortfolioGrid({projects}){
+    const [filter,setFilter]=useState('all');
+    const tags=[...new Set(projects.map(p=>p.tag).filter(Boolean))];
+    return <><div className="filter-bar"><span className="filter-label">Filter:</span>{['all',...tags].map(tag=><button key={tag} className={`filter-btn${filter===tag?' active':''}`} aria-pressed={filter===tag} onClick={()=>setFilter(tag)}>{tag==='all'?'All':tag.replaceAll('-',' ')}</button>)}</div><div className="projects-grid" id="projectsGrid">{projects.length?projects.map((project,i)=><article className={`project-card reveal visible${project.status==='coming-soon'?' coming-soon':''}`} key={project.id} hidden={filter!=='all'&&project.tag!==filter}><div className="project-screenshot">{safeURL(project.image_url)?<img src={safeURL(project.image_url)} alt={project.name} loading="lazy" style={{width:'100%',height:'100%',objectFit:'cover'}}/>:<div className="screenshot-placeholder"><Image/><span>No Screenshot</span></div>}<div className="live-badge"><span className="live-dot"/>{project.status==='coming-soon'?'Soon':'Live'}</div></div><div className="project-info"><div className="project-number">{String(i+1).padStart(2,'0')} / {String(projects.length).padStart(2,'0')}</div><h2 className="project-name">{project.name}</h2><p className="project-desc">{project.desc_text}</p><div className="project-footer"><div className="project-tags"><span className="project-tag">{(project.tag||'').replaceAll('-',' ')}</span></div>{safeURL(project.url)&&<a href={safeURL(project.url)} target="_blank" rel="noopener noreferrer" className="project-link">Visit Site<ArrowUpRight/></a>}</div></div></article>):<p className="content-empty">New projects will appear here soon.</p>}</div></>;
+}

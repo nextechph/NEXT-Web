@@ -1,0 +1,405 @@
+
+        /* ── Team Page Specific Enhancements ── */
+        .team-page-hero {
+            padding: 180px 24px 70px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-page-hero .section-tag {
+            margin-bottom: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1.05;
+            margin-bottom: 24px;
+        }
+
+        .team-page-title span {
+            color: var(--text-tertiary);
+        }
+
+        .team-page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            font-weight: 300;
+            max-width: 640px;
+            line-height: 1.7;
+        }
+
+        /* ── Meta / Highlight Stats Bar ── */
+        .team-page-meta {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .meta-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .meta-stat-num {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .meta-stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        .meta-divider {
+            width: 1px;
+            height: 44px;
+            background: var(--border);
+        }
+
+        /* ── Team Filter Tabs ── */
+        .team-filter-bar {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-filter-btn {
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .team-filter-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        .team-filter-btn.active {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border-color: var(--text-primary);
+        }
+
+        /* ── Team Section Grid Container ── */
+        .team-content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+            transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-grid-container.grid-exiting {
+            opacity: 0;
+            transform: translateY(14px) scale(0.985);
+            pointer-events: none;
+        }
+
+        @keyframes cardEntranceStagger {
+            0% {
+                opacity: 0;
+                transform: translateY(28px) scale(0.97);
+            }
+            60% {
+                opacity: 0.92;
+                transform: translateY(-2px) scale(1.005);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .leader-card.card-enter {
+            animation: cardEntranceStagger 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+            will-change: transform, opacity;
+        }
+
+        /* ── Enhanced Leader Card ── */
+        .leader-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(8px);
+        }
+
+        .leader-card.founder {
+            border-color: rgba(var(--accent-rgb), 0.35);
+            background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.03) 0%, var(--card-bg) 100%);
+        }
+
+        @media (hover: hover) {
+            .leader-card:hover {
+                border-color: var(--border-hover);
+                transform: translateY(-4px);
+                background-color: var(--card-hover);
+            }
+
+            .leader-card.founder:hover {
+                border-color: rgba(var(--accent-rgb), 0.6);
+                box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        /* ── Badge Overlay Contrast (Dark & Light Modes) ── */
+        .leader-photo-wrapper .leader-badge-pill {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 3;
+            margin-bottom: 0;
+            backdrop-filter: blur(8px);
+            background: rgba(10, 10, 10, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+            color: #FFFFFF;
+        }
+
+        .leader-photo-wrapper .leader-badge-pill.founder-badge {
+            color: #FFFFFF;
+            border-color: rgba(255, 255, 255, 0.45);
+            background: rgba(10, 10, 10, 0.85);
+        }
+
+        .leader-photo-wrapper .leader-badge-pill.clevel-badge {
+            color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        .leader-photo-wrapper .leader-badge-pill.team-badge {
+            color: rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        [data-theme="light"] .leader-photo-wrapper .leader-badge-pill,
+        [theme="light"] .leader-photo-wrapper .leader-badge-pill {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(12px);
+        }
+
+        [data-theme="light"] .leader-photo-wrapper .leader-badge-pill.founder-badge,
+        [theme="light"] .leader-photo-wrapper .leader-badge-pill.founder-badge {
+            color: #0A0A0A !important;
+            border-color: rgba(0, 0, 0, 0.35) !important;
+            background: #FFFFFF !important;
+            font-weight: 800;
+        }
+
+        [data-theme="light"] .leader-photo-wrapper .leader-badge-pill.clevel-badge,
+        [theme="light"] .leader-photo-wrapper .leader-badge-pill.clevel-badge {
+            color: #1A1A1A !important;
+            border-color: rgba(0, 0, 0, 0.22) !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            font-weight: 700;
+        }
+
+        [data-theme="light"] .leader-photo-wrapper .leader-badge-pill.team-badge,
+        [theme="light"] .leader-photo-wrapper .leader-badge-pill.team-badge {
+            color: #333333 !important;
+            border-color: rgba(0, 0, 0, 0.18) !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            font-weight: 600;
+        }
+
+        [data-theme="light"] .leader-photo-overlay,
+        [theme="light"] .leader-photo-overlay {
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, transparent 100%);
+        }
+
+        [data-theme="light"] .leader-photo-wrapper,
+        [theme="light"] .leader-photo-wrapper {
+            background: #FFFFFF;
+        }
+
+        /* ── Principles / Culture Section ── */
+        .principles-section {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-secondary);
+            padding: 100px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .principles-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .principle-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: var(--transition-smooth);
+        }
+
+        @media (hover: hover) {
+            .principle-card:hover {
+                border-color: var(--border-hover);
+                transform: translateY(-4px);
+            }
+        }
+
+        .principle-num {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.2em;
+        }
+
+        .principle-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+        }
+
+        .principle-desc {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            font-weight: 300;
+            line-height: 1.7;
+        }
+
+        /* ── Team CTA ── */
+        .team-cta-section {
+            padding: 120px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+
+        .team-cta-box {
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-cta-box h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 20px;
+        }
+
+        .team-cta-box p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-weight: 300;
+            max-width: 580px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .team-cta-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link-active {
+            color: var(--text-primary) !important;
+        }
+
+        .nav-link-active::after {
+            width: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .team-page-hero {
+                padding: 140px 20px 50px;
+            }
+
+            .team-page-meta {
+                gap: 24px;
+            }
+
+            .meta-divider {
+                display: none;
+            }
+
+            .team-grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .leader-card {
+                padding: 30px 24px;
+            }
+
+            .team-cta-box {
+                padding: 50px 24px;
+            }
+        }
+    

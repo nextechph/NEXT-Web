@@ -12,10 +12,10 @@
         },
         'second-boot': {
             title: 'Second Boot by NEXT',
-            description: 'A second life for your PC. A fresh start for your next build. Our hardware division revives legacy Intel 1st–6th gen systems and builds custom computers with the latest technology.',
+            description: 'A second life for your PC. A fresh start for your next build. Our hardware division revives legacy PCs and builds custom computers with the latest technology.',
             note: 'Tell us your current specs, what you use your PC for, and your budget. We’ll help you find the right path.',
             items: [
-                { title: 'Legacy, with a new lease on life.', category: '01 / REVIVE', description: 'Bring Intel 1st–6th gen systems back into everyday use. We assess your hardware and recommend practical upgrades, from SSDs and RAM to cooling and a fresh setup.', featured: true },
+                { title: 'Legacy, with a new lease on life.', category: '01 / REVIVE', description: 'Bring older computers back into everyday use. We assess your hardware and recommend practical upgrades, from SSDs and RAM to cooling and a fresh setup.', featured: true },
                 { title: 'Your next custom build.', category: '02 / BUILD', description: 'Modern custom computers built around your workload, style, and budget. From everyday productivity to gaming and creative work, we help select compatible parts and assemble your system.', featured: true },
                 { title: 'Keep your machine moving.', category: '03 / SERVICE', description: 'Troubleshooting, hardware diagnostics, cleaning, thermal care, and component upgrades. Start with an assessment so we can recommend the right service for your PC.', featured: true }
             ]
@@ -33,7 +33,8 @@
         if (error) throw error;
         if (!data) return structuredClone(defaults[key]);
         if (!data.content || !Array.isArray(data.content.items)) throw new Error('Section content is invalid.');
-        return { ...structuredClone(defaults[key]), ...data.content };
+        const content = { ...structuredClone(defaults[key]), ...data.content };
+        return window.normalizeSectionCopy ? window.normalizeSectionCopy(key, content) : content;
     }
     function mockup(item) {
         const image = imageURL(item.image);

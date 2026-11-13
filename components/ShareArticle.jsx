@@ -1,0 +1,5 @@
+'use client';
+import { useState } from 'react';
+import { Link, ExternalLink } from 'lucide-react';
+import { Facebook } from './BrandIcons';
+export default function ShareArticle(){const [status,setStatus]=useState('');async function copy(){try{await navigator.clipboard.writeText(window.location.href);setStatus('Link copied.');}catch{setStatus('Copy the address from your browser to share this article.');}}return <div className="article-share-bar"><span className="share-label">Share Article</span><div className="share-btns"><button className="share-btn" aria-label="Copy article link" onClick={copy}><Link size={16}/></button><button className="share-btn" aria-label="Share on X" onClick={()=>window.open(`https://x.com/intent/tweet?url=${encodeURIComponent(location.href)}`,'_blank','noopener,noreferrer')}><ExternalLink size={16}/></button><button className="share-btn" aria-label="Share on Facebook" onClick={()=>window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}`,'_blank','noopener,noreferrer')}><Facebook size={16}/></button></div><span role="status">{status}</span></div>;}

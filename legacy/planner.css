@@ -1,0 +1,682 @@
+
+        /* ── Planner Page Specific Styles ── */
+
+        .planner-page-hero {
+            padding: 180px 24px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .planner-page-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 1;
+            margin-bottom: 24px;
+        }
+
+        .planner-page-title span {
+            color: var(--text-tertiary);
+        }
+
+        .planner-page-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 300;
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        /* Planner Section Override for full-page layout */
+        .planner-section {
+            padding-top: 0;
+        }
+
+        .planner-section .section-container {
+            padding-top: 20px;
+        }
+
+        .planner-section .section-header {
+            display: none;
+            /* Hidden — we use the hero title instead */
+        }
+
+        /* Step progress indicator */
+        .planner-progress {
+            max-width: 1200px;
+            margin: 0 auto 0;
+            padding: 0 24px 40px;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            z-index: 5;
+            overflow-x: auto;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            position: relative;
+            transition: opacity 0.3s;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: calc(100% - 130px);
+            height: 1px;
+            background: var(--border);
+            left: 130px;
+            transition: background 0.3s;
+        }
+
+        .progress-step.completed:not(:last-child)::after {
+            background: var(--accent);
+        }
+
+        .progress-num {
+            font-family: var(--font-heading);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            color: var(--text-tertiary);
+            border: 1px solid var(--border);
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .progress-step.active .progress-num {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .progress-step.completed .progress-num {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--btn-primary-text);
+        }
+
+        .progress-label {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .progress-step.active .progress-label {
+            color: var(--text-primary);
+        }
+
+        .progress-step.completed .progress-label {
+            color: var(--text-secondary);
+        }
+
+        /* Contact redirect note */
+        .planner-note {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 24px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .planner-note p {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .planner-note svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Override apply button behavior on standalone page */
+        #applyBlueprintBtn {
+            width: 100%;
+        }
+
+        /* Plan Switcher */
+        .plan-switcher {
+            display: flex;
+            gap: 0;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+            width: fit-content;
+        }
+
+        .plan-tab {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 12px 32px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .plan-tab.active {
+            background: var(--accent);
+            color: var(--btn-primary-text);
+        }
+
+        @media (hover: hover) {
+            .plan-tab:not(.active):hover {
+                background: var(--card-hover);
+                color: var(--text-primary);
+            }
+        }
+
+        /* Student Base Banner */
+        .student-base-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 28px 32px;
+            margin-bottom: 8px;
+            gap: 24px;
+        }
+
+        .student-base-label {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--text-tertiary);
+            margin-bottom: 6px;
+        }
+
+        .student-base-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .student-base-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .student-base-price {
+            font-family: var(--font-heading);
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        /* Add-on Grid */
+        .addon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .addon-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid var(--border);
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            background: var(--card-bg);
+        }
+
+        @media (hover: hover) {
+            .addon-card:hover {
+                border-color: var(--border-hover);
+                background: var(--card-hover);
+            }
+        }
+
+        .addon-card input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .addon-card:has(input:checked) {
+            border-color: var(--accent);
+            background: var(--card-hover);
+        }
+
+        .addon-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            gap: 12px;
+        }
+
+        .addon-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .addon-price {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .addon-note {
+            font-size: 0.65rem;
+            font-weight: 400;
+            color: var(--text-tertiary);
+        }
+
+        /* Running Bill */
+        .student-bill {
+            border: 1px solid var(--border);
+            background: var(--bg-secondary);
+            padding: 28px 32px;
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-heading);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bill-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .bill-base {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .bill-addon {
+            color: var(--text-secondary);
+        }
+
+        .bill-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 0.05em;
+        }
+
+        /* Timeline note */
+        .timeline-note {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+            text-transform: none;
+            font-family: var(--font-body);
+        }
+
+        .planner-opt-card.active .timeline-note {
+            color: var(--text-secondary);
+        }
+
+        /* Pro Budget Tier Cards */
+        .pro-budget-options {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .pro-budget-card {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 24px !important;
+            position: relative;
+            height: auto !important;
+            min-height: unset !important;
+        }
+
+        .pro-budget-badge {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: var(--accent);
+            color: var(--btn-primary-text);
+            font-family: var(--font-heading);
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            padding: 5px 10px;
+        }
+
+        .pro-budget-tier {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            color: var(--text-tertiary);
+            margin-bottom: 8px;
+        }
+
+        .pro-budget-price {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .pro-budget-ideal {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .pro-budget-options {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Wizard Steps */
+        .planner-wizard-step {
+            animation: wizFadeIn 0.35s ease;
+        }
+
+        @keyframes wizFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Wizard Navigation Buttons */
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+            background: var(--card-hover);
+        }
+
+        /* Wizard Form Fields */
+        .wiz-field {
+            margin-bottom: 20px;
+        }
+
+        .wiz-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .wiz-label {
+            display: block;
+            font-family: var(--font-heading);
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .wiz-required {
+            color: var(--accent);
+        }
+
+        .wiz-input,
+        .wiz-textarea,
+        .wiz-select {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+            border-radius: 0;
+            appearance: none;
+        }
+
+        .wiz-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .wiz-input:focus,
+        .wiz-textarea:focus,
+        .wiz-select:focus {
+            border-color: var(--accent);
+        }
+
+        .wiz-input::placeholder,
+        .wiz-textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        /* Review Card */
+        .wiz-review-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .wiz-review-title {
+            font-family: var(--font-heading);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--text-tertiary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wiz-review-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 0.82rem;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .wiz-review-row:last-child {
+            border-bottom: none;
+        }
+
+        .wiz-review-row span:first-child {
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        .wiz-review-row span:last-child {
+            color: var(--text-primary);
+            font-weight: 500;
+            text-align: right;
+        }
+
+
+        /* Footer spacing */
+        .planner-section {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            .proProgressBar {
+                gap: 4px;
+            }
+
+            .wiz-row {
+                grid-template-columns: 1fr;
+            }
+
+            .student-base-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding: 24px 20px;
+            }
+
+            .student-base-price {
+                font-size: 2rem;
+                align-self: flex-start;
+            }
+
+            .student-bill {
+                padding: 20px;
+            }
+
+            .bill-row {
+                font-size: 0.8rem;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .bill-row span:first-child {
+                flex: 1;
+                text-align: left;
+            }
+
+            .bill-row span:last-child {
+                flex-shrink: 0;
+                text-align: right;
+                white-space: nowrap;
+            }
+
+            .addon-card {
+                padding: 12px 16px;
+            }
+        }
+    
+
+        .nav-link-active {
+            color: var(--text-primary) !important;
+        }
+
+        .nav-link-active::after {
+            width: 100% !important;
+        }
+
+        @keyframes wizShake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            20% {
+                transform: translateX(-8px);
+            }
+
+            40% {
+                transform: translateX(8px);
+            }
+
+            60% {
+                transform: translateX(-5px);
+            }
+
+            80% {
+                transform: translateX(5px);
+            }
+        }
+    

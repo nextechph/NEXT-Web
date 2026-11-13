@@ -1,0 +1,120 @@
+{
+  "SERVICES_DEFAULTS": [
+    {
+      "num": "01",
+      "icon": "code-2",
+      "title": "Website Development",
+      "desc": "Tailored web applications built with clean, semantic code, optimized for speed, scalability, and security.",
+      "bullets": [
+        "Custom Framework Architectures",
+        "Blazing Fast Load Speed",
+        "SEO Optimized Build"
+      ]
+    },
+    {
+      "num": "02",
+      "icon": "layers",
+      "title": "Landing Pages",
+      "desc": "High-converting single-page layouts designed to present your product clearly and drive user action.",
+      "bullets": [
+        "Copywriting-optimized Layout",
+        "Conversion Rate Focus",
+        "Integrated A/B Analytics"
+      ]
+    },
+    {
+      "num": "03",
+      "icon": "user",
+      "title": "Portfolio Websites",
+      "desc": "Sophisticated digital showcases for artists, designers, and agencies to display their work with premium flair.",
+      "bullets": [
+        "Smooth Motion Design",
+        "Responsive Image Galleries",
+        "Premium Visual Layouts"
+      ]
+    },
+    {
+      "num": "04",
+      "icon": "building-2",
+      "title": "Business Websites",
+      "desc": "Professional corporate web platforms that project credibility, match branding, and capture leads.",
+      "bullets": [
+        "CMS Integration (WordPress/Headless)",
+        "Customer Portal Setups",
+        "Lead Capture Pipelines"
+      ]
+    },
+    {
+      "num": "05",
+      "icon": "palette",
+      "title": "UI/UX Design",
+      "desc": "Figma-crafted user flows, interactive prototypes, and wireframes designed with absolute visual precision.",
+      "bullets": [
+        "User Journey Mapping",
+        "Interactive High-Fi Prototypes",
+        "Clean Component-Based Design"
+      ]
+    }
+  ],
+  "FAQ_DEFAULTS": [
+    {
+      "question": "How much does a website cost in the Philippines?",
+      "answer": "Website pricing at NEXT Technology starts at ₱10,000 for simple landing pages and ranges up to ₱60,000+ for complex, full-featured web applications. The final cost depends on the number of pages, custom features, design complexity, and your target timeline. Use our free Project Planner to get an instant estimate tailored to your needs.",
+      "category": "Pricing"
+    },
+    {
+      "question": "How long does it take to build a website?",
+      "answer": "A standard website typically takes 1–2 months from kickoff to launch. Rush projects can be delivered in 2–4 weeks, while relaxed timelines with no hard deadline extend to 3+ months. Timeline depends on project complexity, the number of revision rounds, and how quickly feedback is provided.",
+      "category": "Process"
+    },
+    {
+      "question": "What types of websites does NEXT Technology build?",
+      "answer": "We build landing pages, business websites, portfolio websites, web applications, e-commerce stores, and blog platforms. Every project is engineered for speed, SEO, and mobile responsiveness — with a minimalist, high-performance design philosophy.",
+      "category": "Services"
+    },
+    {
+      "question": "What technologies do you use?",
+      "answer": "We use modern web technologies including HTML5, CSS3, JavaScript (ES6+), and frameworks like React and Next.js for complex apps. For backend and databases we use Supabase (PostgreSQL), and for deployment we use Vercel, Netlify, and shared hosting. Every build is clean, semantic, and optimized for performance.",
+      "category": "Services"
+    },
+    {
+      "question": "Do you offer website maintenance after launch?",
+      "answer": "Yes. We offer post-launch support including bug fixes, content updates, security patches, and performance monitoring. Maintenance plans can be arranged on a retainer or per-request basis depending on the scope of your site.",
+      "category": "Services"
+    },
+    {
+      "question": "How do I get started with a project?",
+      "answer": "Getting started is simple: fill out the Project Planner on our website to configure your website type, features, budget, and timeline. Our team will review your submission and reach out within 24–48 hours to discuss next steps. No commitment required to get a quote.",
+      "category": "Process"
+    },
+    {
+      "question": "Do you work with clients outside the Philippines?",
+      "answer": "Yes. NEXT Technology works with clients globally. We communicate via email, WhatsApp, Zoom, and other video conferencing tools. All payments are processed securely online, and project delivery is fully remote-friendly.",
+      "category": "General"
+    },
+    {
+      "question": "What is included in a website development package?",
+      "answer": "All our website packages include custom design, clean semantic code, mobile responsiveness, basic SEO setup (meta tags, sitemap, structured data), and one round of revisions. Additional pages, animations, contact forms, admin panels, and e-commerce features are available as add-ons.",
+      "category": "Services"
+    }
+  ],
+  "TEAM_DEFAULTS": [
+    {
+      "name": "John Enrico Santiago",
+      "role": "Founder & CEO",
+      "badge": "Founder",
+      "bio": "Visionary technologist and lead architect of NEXT Technology. Building minimalist, high-performance digital products that empower brands and delight users.",
+      "image_url": "",
+      "skills": [
+        "Full-Stack Development",
+        "Product Strategy",
+        "UI/UX Design",
+        "System Architecture"
+      ],
+      "linkedin_url": "",
+      "github_url": "",
+      "twitter_url": "",
+      "email": ""
+    }
+  ]
+}
